@@ -28,16 +28,13 @@ public class SolverCliqueMasPesada {
 
 	private void resolver() {
 		
-		// añado el vértice más pesado
-		verticesDeLaClique.add(verticesDelGrafo.get(0));
-
 		/* la clase Vertice implementa Comparable de forma que se ordena
 		 * de mayor a menor de acuerdo al peso.
 		 * Por eso en vertices del grafo ya están ordenadas de esa forma
 		 * y se pueden iterar sabiendo que la primera es la más pesada
 		 * y la última la menos pesada y así
 		*/
-		for (int i = 1; i < verticesDelGrafo.size(); i++) {
+		for (int i = 0; i < verticesDelGrafo.size(); i++) {
 			Vertice v = verticesDelGrafo.get(i);
 
 			// verifico si agregando v, sigue siendo una clique

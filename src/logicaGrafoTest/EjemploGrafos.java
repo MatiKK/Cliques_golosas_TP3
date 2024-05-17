@@ -5,10 +5,16 @@ import logicaGrafo.Vertice;
 
 public class EjemploGrafos {
 
+	/**
+	 * Grafo de la diapositiva del TP3
+	 */
 	private static Grafo grafo1;
 	private static Grafo grafo2;
 	private static Grafo grafo3;
 
+	/**
+	 * @return Grafo de la diapositiva del TP3
+	 */
 	public static Grafo grafo1() {
 		if (grafo1 == null)
 			inicializarGrafo1();
@@ -28,6 +34,7 @@ public class EjemploGrafos {
 	}
 
 	private static void inicializarGrafo1() {
+		// Grafo de la diapositiva del TP3
 		Grafo g = new Grafo();
 		Vertice v1 = new Vertice(1,11.0);
 		Vertice v2 = new Vertice(2,5.5);
