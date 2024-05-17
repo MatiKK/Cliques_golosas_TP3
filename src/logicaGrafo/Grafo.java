@@ -1,6 +1,11 @@
 package logicaGrafo;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class Grafo {
 
@@ -93,9 +98,15 @@ public class Grafo {
 		}
 	}
 
-	/*
-	 * Nomás se va a usar para cuando se quiera
-	 * imprimir por pantalla o graficar
+	/**
+	 * Devuelve un {@link java.util.Iterator} de las aristas de este grafo.
+	 * Está implementado de tal forma que no devuelve una misma arista dos veces,
+	 *  es decir, si existe una arista entre los vertices A y B,
+	 *  si este iterador devuelve la arista A-B, entonces NO devolverá la arista B-A.
+	 *  Este diseño se pensó en la posible necesidad de querer mostrar por
+	 *  consola las aristas de un grafo o de querer graficarlas,
+	 *  haciendo que cada arista sea iterada una única vez.
+	 * @return un iterador de las aristas de este grafo.
 	 */
 	public Iterator<Arista> aristasIterator(){
 

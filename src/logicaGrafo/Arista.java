@@ -1,5 +1,13 @@
 package logicaGrafo;
 
+/**
+ * Esta clase solo es usada cuando se itera un grafo
+ * y se desean conocer sus aristas para poder graficarlas
+ * o mostrarlas por consola.
+ * Los grafos implementan el método {@link Grafo#aristasIterator()}
+ * que devuelve un {@link java.util.Iterator}, diseñado específicamente
+ * para que una misma arista no sea devuelta dos veces.
+ */
 public class Arista {
 
 	private Vertice inicio;
