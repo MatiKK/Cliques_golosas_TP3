@@ -4,14 +4,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * Clase que representa una clique.
+ * Una clique es un conjunto de vértices donde todos los vértoces son vecinos
+ * entre sí.
+ * <p>
+ * Una clique es un grafo, y un grafo puede tener cliques como subgrafos.
+ */
 public class Clique extends Grafo {
 
 	private final ArrayList<Vertice> vertices;
 	private double peso;
 
+	/**
+	 * Crea una clique a partir de los vértices dados
+	 * 
+	 * @param verticesClique vértices que se desean para la clique
+	 * @throws NullPointerException si vericesClique es {@code null}
+	 */
 	public Clique(ArrayList<Vertice> verticesClique) {
 		this.vertices = new ArrayList<>();
-		for (Vertice v: verticesClique) {
+		for (Vertice v : verticesClique) {
 			vertices.add(v);
 			peso += v.obtenerPeso();
 		}
@@ -30,29 +43,23 @@ public class Clique extends Grafo {
 	}
 
 	@Override
-	public Collection<Vertice> vertices(){
+	public Collection<Vertice> vertices() {
 		return vertices;
 	}
 
 	@Override
-	/*
-	 * Nomás se va a usar para cuando se quiera
-	 * imprimir por pantalla o graficar
-	 */
-	public Iterator<Arista> aristasIterator(){
+	public Iterator<Arista> aristasIterator() {
 		return new Iterator<Arista>() {
-			private int
-				cantidadVertices = cantidadVertices(),
-				ind1 = 0,
-				ind2 = 0;
+			private int cantidadVertices = cantidadVertices(), ind1 = 0, ind2 = 0;
 
 			@Override
 			public boolean hasNext() {
-				boolean a,b;
+				boolean a, b;
 				a = ind1 >= cantidadVertices - 2;
 				b = ind2 >= cantidadVertices - 1;
 				return !(a && b);
 			}
+
 			@Override
 			public Arista next() {
 				ind2++;
@@ -62,7 +69,7 @@ public class Clique extends Grafo {
 				}
 				Vertice v1 = vertices.get(ind1);
 				Vertice v2 = vertices.get(ind2);
-				return new Arista(v1, v1.obtenerPeso(), v2, v2.obtenerPeso());
+				return new Arista(v1, v2);
 			}
 		};
 	}
@@ -73,7 +80,7 @@ public class Clique extends Grafo {
 		System.out.println("Vertices: " + vertices());
 		System.out.println("Aristas:");
 		Iterator<Arista> aristas = aristasIterator();
-		while(aristas.hasNext()) {
+		while (aristas.hasNext()) {
 			System.out.println(aristas.next());
 		}
 	}
