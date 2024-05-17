@@ -3,6 +3,7 @@ package logicaGrafo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Clase que representa una clique.
@@ -62,14 +63,18 @@ public class Clique extends Grafo {
 
 			@Override
 			public Arista next() {
-				ind2++;
-				if (ind2 == cantidadVertices) {
-					ind1++;
-					ind2 = ind1 + 1;
+				try {
+					ind2++;
+					if (ind2 == cantidadVertices) {
+						ind1++;
+						ind2 = ind1 + 1;
+					}
+					Vertice v1 = vertices.get(ind1);
+					Vertice v2 = vertices.get(ind2);
+					return new Arista(v1, v2);
+				} catch (IndexOutOfBoundsException e) {
+					throw new NoSuchElementException();
 				}
-				Vertice v1 = vertices.get(ind1);
-				Vertice v2 = vertices.get(ind2);
-				return new Arista(v1, v2);
 			}
 		};
 	}
