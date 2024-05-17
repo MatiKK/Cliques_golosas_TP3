@@ -57,7 +57,7 @@ public class EjemploGrafos {
 		g.agregarAristaEntreVertices(v4, v6);
 		g.agregarAristaEntreVertices(v5, v6);
 
-		// la mayor clique es con los vertices {1,2,4}
+		// la mayor clique es con los vertices {1,2,4} con peso 23.5
 		// Si no coincide es por culpa del algoritmo goloso
 		grafo1 = g;
 	}
@@ -81,7 +81,7 @@ public class EjemploGrafos {
 		g.agregarAristaEntreVertices(v5, v3);
 		g.agregarAristaEntreVertices(v5, v4);
 
-		// la mayor clique es con los vertices {1,2}
+		// la mayor clique es con los vertices {1,2} con peso 150
 		// Si no coincide es por culpa del algoritmo goloso
 		grafo2 = g;
 	}
@@ -117,7 +117,7 @@ public class EjemploGrafos {
 		g.agregarAristaEntreVertices(v4, v9);
 		g.agregarAristaEntreVertices(v8, v9);
 
-		// la mayor clique es con los vertices {0,1,3}
+		// la mayor clique es con los vertices {0,1,3} con peso 8
 		// Si no coincide es por culpa del algoritmo goloso
 		grafo3 = g;
 	}
