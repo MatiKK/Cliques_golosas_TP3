@@ -23,6 +23,16 @@ public class Grafo {
 		return listaVecinos.size();
 	}
 
+	public void agregarVertices(Vertice... vertices) {
+		if (cantidadVertices() == 0) {
+			for (Vertice v: vertices)
+				agregarVerticeSinChequear(v);
+		} else {
+			for (Vertice v: vertices)
+				agregarVertice(v);
+		}
+	}
+
 	public void agregarVertice(Vertice v) {
 		verificarQueElVerticeNoExiste(v);
 		agregarVerticeSinChequear(v);
