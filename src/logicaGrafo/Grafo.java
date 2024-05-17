@@ -143,4 +143,8 @@ public class Grafo {
 		};
 	}
 
+	public Clique cliqueMasPesada() {
+		return SolverCliqueMasPesada.cliqueMasPesada(this);
+	}
+
 }

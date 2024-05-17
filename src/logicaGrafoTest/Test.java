@@ -11,7 +11,7 @@ public class Test {
 
 		System.out.println("\n---------------------------------------\n");
 
-		Clique clique = SolverCliqueMasPesada.cliqueMasPesada(g);
+		Clique clique = g.cliqueMasPesada();
 		clique.data();
 
 	}
