@@ -4,9 +4,6 @@ import java.util.*;
 
 public class SolverCliqueMasPesada {
 
-	// TODO
-	// BORRAR TODOS LOS COMENTARIOS ANTES DE ENTREGAR
-
 	private Grafo grafo;
 	private ArrayList<Vertice> verticesDeLaClique;
 	private ArrayList<Vertice> verticesDelGrafo;
@@ -17,8 +14,9 @@ public class SolverCliqueMasPesada {
 
 	private SolverCliqueMasPesada(Grafo g) {
 		grafo = g;
-		verticesDelGrafo = new ArrayList<>(grafo.vertices());
 		verticesDeLaClique = new ArrayList<>();
+		verticesDelGrafo = new ArrayList<>(grafo.vertices());
+		Collections.reverse(verticesDelGrafo);
 	}
 
 	private Clique cliqueMasPesada(){
@@ -28,18 +26,9 @@ public class SolverCliqueMasPesada {
 
 	private void resolver() {
 		
-		/* la clase Vertice implementa Comparable de forma que se ordena
-		 * de mayor a menor de acuerdo al peso.
-		 * Por eso en vertices del grafo ya están ordenadas de esa forma
-		 * y se pueden iterar sabiendo que la primera es la más pesada
-		 * y la última la menos pesada y así
-		*/
 		for (int i = 0; i < verticesDelGrafo.size(); i++) {
 			Vertice v = verticesDelGrafo.get(i);
-
-			// verifico si agregando v, sigue siendo una clique
-			if (siAgregoEsteVerticeFormoUnaClique(verticesDeLaClique, v)) {
-				// si lo sigue siendo lo agrego
+			if (siAgregoEsteVerticeSigueSiendoUnaClique(verticesDeLaClique, v)) {
 				verticesDeLaClique.add(v);
 			}
 		}
@@ -54,7 +43,7 @@ public class SolverCliqueMasPesada {
 	 * @return {@code true} si la sub-clique seguirá
 	 * siendo una clique si se añade el vérice dado
 	 */
-	private boolean siAgregoEsteVerticeFormoUnaClique(ArrayList<Vertice> subClique, Vertice v) {
+	private boolean siAgregoEsteVerticeSigueSiendoUnaClique(ArrayList<Vertice> subClique, Vertice v) {
 		for (Vertice vertice: subClique) {
 			if (!grafo.vecinosDelVertice(vertice).contains(v)) {
 				return false;

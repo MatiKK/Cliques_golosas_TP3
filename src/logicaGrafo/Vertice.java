@@ -30,7 +30,7 @@ public class Vertice implements Comparable<Vertice> {
 
 	@Override
 	public int hashCode() {
-		return nombre.hashCode();
+		return 31 * Double.hashCode(peso) + nombre.hashCode();
 	}
 
 	@Override
@@ -39,8 +39,7 @@ public class Vertice implements Comparable<Vertice> {
 		if (x == 0) {
 			x = nombre.compareTo(v.nombre);
 		}
-//		return x; // ordena de menor a mayor
-		return -x; // ordena de mayor a menor
+		return x;
 	}
 
 }
