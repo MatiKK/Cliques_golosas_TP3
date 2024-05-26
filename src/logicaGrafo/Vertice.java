@@ -1,5 +1,7 @@
 package logicaGrafo;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+
 /**
  * Clase que representa el vértice de un grafo. La clase {@link Grafo} solo
  * trabaja con instancias de esta clase.
@@ -8,6 +10,7 @@ public class Vertice implements Comparable<Vertice> {
 
 	private String nombre; // para representarlo en un gráfico
 	private double peso;
+	private Coordinate coordenada;
 
 	/**
 	 * Crea un vértice con un nombre representativo y un peso
@@ -17,12 +20,13 @@ public class Vertice implements Comparable<Vertice> {
 	 * @param p peso del vertice
 	 * @throws IllegalArgumentException si el peso es negativo
 	 */
-	public Vertice(Object n, double p) {
+	public Vertice(Object n, double p, Coordinate cord) {
 		if (p < 0) {
 			throw new IllegalArgumentException("Peso negativo no es válido.");
 		}
 		nombre = n.toString();
 		peso = p;
+		coordenada = cord;
 	}
 
 	/**
@@ -32,6 +36,11 @@ public class Vertice implements Comparable<Vertice> {
 	public double obtenerPeso() {
 		return peso;
 	}
+	
+	public Coordinate getCordenada() {
+		return coordenada;
+	}
+	
 
 	@Override
 	public String toString() {
