@@ -1,6 +1,7 @@
 package logicaGrafo;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -211,11 +212,51 @@ public class Grafo {
 		};
 	}
 
+	Comparator<Vertice> comparadorPorMayorPeso(){
+		return new Comparator<Vertice>() {
+			@Override
+			public int compare(Vertice o1, Vertice o2) {
+				return o1.compareTo(o2);
+			}
+		};
+	}
+
+	Comparator<Vertice> comparadorPorCantidadVecinos(){
+		return new Comparator<Vertice>() {
+			@Override
+			public int compare(Vertice o1, Vertice o2) {
+				int x = vecinosDelVertice(o1).size() - vecinosDelVertice(o2).size();
+				if (x == 0)
+					x = o1.compareTo(o2);
+				return x;
+			}
+		};
+	}
+
 	/**
-	 * @return la clique más pesada de este grafo
+	 * Devuelve la clique más pesada, donde el algoritmo de evaluación
+	 * ordena los vértices del grafo de acuerdo su peso.
+	 * Este criterio se basa en que la clique más pesada debe
+	 * contener a los vértices más pesados.
+	 * @return Devuelve la clique más pesada ordenando los vértices del más al menos pesado
 	 */
-	public Clique cliqueMasPesada() {
-		return SolverCliqueMasPesada.cliqueMasPesada(this);
+	public Clique cliqueMasPesadaOrdenandoPorPeso() {
+		return new SolverCliqueMasPesada(this,
+				comparadorPorMayorPeso()).cliqueMasPesada();
+	}
+
+	/**
+	 * Devuelve la clique más pesada, donde el algoritmo de evaluación
+	 * ordena los vértices del grafo de acuerdo la cantidad de vecinos de cada uno.
+	 * Este criterio se basa en que, mientras más vértices, más peso tendrá la clique,
+	 * entonces busca los vértices con más vecinos, con mayor posibilidad de obtener
+	 * cliques de tamaño grandes.
+	 * @return Devuelve la clique más pesada ordenando los vértices
+	 * de los que tienen más a menos vecinos
+	 */
+	public Clique cliqueMasPesadaOrdenandoPorCantidadVertices() {
+		return new SolverCliqueMasPesada(this,
+				comparadorPorCantidadVecinos()).cliqueMasPesada();
 	}
 
 }

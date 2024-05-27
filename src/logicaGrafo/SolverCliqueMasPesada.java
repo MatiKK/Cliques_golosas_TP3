@@ -2,6 +2,7 @@ package logicaGrafo;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Clase Solver para la búsqueda de la clique más pesada de un grafo.
@@ -11,51 +12,39 @@ public class SolverCliqueMasPesada {
 	private Grafo grafo;
 	private ArrayList<Vertice> verticesDeLaClique;
 	private ArrayList<Vertice> verticesDelGrafo;
+	private Comparator<Vertice> comparadorVertices;
 
 	/**
 	 *  Para evitar iterar todos los vértices cuando no sea necesario
 	 */
 	private int cantidadVecinosDelMayorVertice;
 
-	/**
-	 * Devuelve la clique más pesada del grafo dado.
-	 * @param g grafo del cual se quiere la clique más pesada
-	 * @return la cliquee más pesada del grafo g
-	 */
-	public static Clique cliqueMasPesada(Grafo g) {
-		return new SolverCliqueMasPesada(g).cliqueMasPesada();
-	}
-
-	/**
-	 * Instancia un Solver para hallar la clique más pesada de un grafo.
-	 * Acá solo se instancian las colleciones que se van a usar para el hallazgo
-	 * de la clique, y se ordenan de mayor peso a menor peso los vértices del grafo.
-	 * 
-	 * @param g grafo del cual se quiere hallar la clique más pesada
-	 */
-	private SolverCliqueMasPesada(Grafo g) {
+	SolverCliqueMasPesada(Grafo g, Comparator<Vertice> comparador) {
+		if (g.cantidadVertices() == 0) {
+			throw new IllegalArgumentException("Grafo sin vértices");
+		}
 		grafo = g;
+		verticesDelGrafo = new ArrayList<>(grafo.vertices());
+		comparadorVertices = comparador;
 		cantidadVecinosDelMayorVertice = 0;
 		verticesDeLaClique = new ArrayList<>();
-		verticesDelGrafo = new ArrayList<>(grafo.vertices());
-		Collections.reverse(verticesDelGrafo);
 	}
 
 	/**
 	 * @return la clique más pesada del grafo de este Solver
 	 */
-	private Clique cliqueMasPesada() {
-
-		if (verticesDelGrafo.isEmpty())
-			throw new IllegalArgumentException("Grafo sin vértices");
+	Clique cliqueMasPesada() {
+		Collections.sort(verticesDelGrafo, comparadorVertices);
+		Collections.reverse(verticesDelGrafo);
 		resolver();
 		return new Clique(verticesDeLaClique);
 	}
 
 	/**
-	 * Itera los vértices del grafo, del más pesado al menos pesado,
+	 * Itera los vértices del grafo, desde el mayor vértice al menor
+	 * (de acuerdo al critero del comparador en uso).
 	 * verificando que sea factible que pertenezcan a la clique más pesada.
-	 * En caso de serlo, se los agrega al ArrayList verticesDeLaClique
+	 * En caso de serlo, se los agrega al ArrayList {@code verticesDeLaClique}
 	 */
 	private void resolver() {
 

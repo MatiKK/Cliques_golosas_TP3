@@ -55,9 +55,12 @@ public class Vertice implements Comparable<Vertice> {
 	@Override
 	public int compareTo(Vertice v) {
 		int x = Double.compare(peso, v.peso);
+
+		// Sin esto no permite vértices de mismo peso y se rompe
 		if (x == 0) {
 			x = nombre.compareTo(v.nombre);
 		}
+
 		return x;
 	}
 
