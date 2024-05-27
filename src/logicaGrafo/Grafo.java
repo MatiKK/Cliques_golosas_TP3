@@ -165,7 +165,7 @@ public class Grafo {
 	 * devuelve la arista A-B, entonces NO devolverá la arista B-A. Este diseño se
 	 * pensó en la posible necesidad de querer mostrar por consola las aristas de un
 	 * grafo o de querer graficarlas, haciendo que cada arista sea iterada una única
-	 * vez.
+	 * vez, evitando la redundancia de datos.
 	 * 
 	 * @return un iterador de las aristas de este grafo
 	 */
@@ -212,7 +212,7 @@ public class Grafo {
 		};
 	}
 
-	Comparator<Vertice> comparadorPorMayorPeso(){
+	Comparator<Vertice> comparadorPorPeso(){
 		return new Comparator<Vertice>() {
 			@Override
 			public int compare(Vertice o1, Vertice o2) {
@@ -242,7 +242,7 @@ public class Grafo {
 	 */
 	public Clique cliqueMasPesadaOrdenandoPorPeso() {
 		return new SolverCliqueMasPesada(this,
-				comparadorPorMayorPeso()).cliqueMasPesada();
+				comparadorPorPeso()).cliqueMasPesada();
 	}
 
 	/**

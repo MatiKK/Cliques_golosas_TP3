@@ -8,11 +8,9 @@ import java.util.NoSuchElementException;
 /**
  * Clase que representa una clique.
  * Una clique es un conjunto de vértices donde todos los vértoces son vecinos
- * entre sí.
- * <p>
- * Una clique es un grafo, y un grafo puede tener cliques como subgrafos.
+ * entre sí. Un grafo puede tener cliques como subgrafos.
  */
-public class Clique extends Grafo {
+public class Clique {
 
 	private final ArrayList<Vertice> vertices;
 	private double peso;
@@ -31,30 +29,9 @@ public class Clique extends Grafo {
 		}
 	}
 
-	@Override
-	public void agregarVertices(Vertice... vertices) {
-		for (Vertice v: vertices)
-			agregarVertice(v);
-	}
-
-	@Override
-	public void agregarVertice(Vertice v) {
-		vertices.add(v);
-	}
-
-	@Override
-	public boolean existeAristaEntreVertices(Vertice v1, Vertice v2) {
-		super.verificarQueElVerticeExiste(v1);
-		super.verificarQueElVerticeExiste(v2);
-		return true;
-	}
-
-	@Override
-	public void agregarAristaEntreVertices(Vertice v1, Vertice v2){
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
+	/**
+	 * @return la cantidad de vertices de esta clique
+	 */
 	public int cantidadVertices() {
 		return vertices.size();
 	}
@@ -66,15 +43,29 @@ public class Clique extends Grafo {
 		return peso;
 	}
 
-	@Override
+	/**
+	 * @return los vértices de esta clique
+	 */
 	public Collection<Vertice> vertices() {
 		return vertices;
 	}
 
-	@Override
+	/**
+	 * Devuelve un {@link java.util.Iterator} de las aristas de esta clique. Está
+	 * implementado de tal forma que no devuelve una misma arista dos veces, es
+	 * decir, si existe una arista entre los vertices A y B, si este iterador
+	 * devuelve la arista A-B, entonces NO devolverá la arista B-A. Este diseño se
+	 * pensó en la posible necesidad de querer mostrar por consola las aristas de
+	 * una cluque o de querer graficarlas, haciendo que cada arista sea iterada
+	 * una única vez, evitando la redundancia de datos.
+	 * 
+	 * @return un iterador de las aristas de este grafo
+	 */
 	public Iterator<Arista> aristasIterator() {
 		return new Iterator<Arista>() {
-			private int cantidadVertices = cantidadVertices(), ind1 = 0, ind2 = 0;
+			private int cantidadVertices = cantidadVertices(),
+						ind1 = 0,
+						ind2 = 0;
 
 			@Override
 			public boolean hasNext() {
@@ -102,7 +93,6 @@ public class Clique extends Grafo {
 		};
 	}
 
-	@Override
 	public void data() {
 		System.out.println("Clique de peso " + peso());
 		System.out.println("Vertices: " + vertices());
