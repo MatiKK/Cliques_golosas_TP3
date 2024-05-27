@@ -1,6 +1,7 @@
 package logicaGrafo;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -63,18 +64,6 @@ public class Grafo {
 	}
 
 	/**
-	 * Devuelve el peso de un vértice de este grafo
-	 * 
-	 * @param v vértice del cual se quiere saber su peso
-	 * @return el peso del vértice dado
-	 * @throws IllegalArgumentException si el vértice no es parte del grafo
-	 */
-	public double pesoDeVertice(Vertice v) {
-		verificarQueElVerticeExiste(v);
-		return v.obtenerPeso();
-	}
-
-	/**
 	 * Agrega una arista entre dos vértices
 	 * 
 	 * @param v1 primer vértice
@@ -121,13 +110,13 @@ public class Grafo {
 		return listaVecinos.containsKey(v);
 	}
 
-	private void verificarQueElVerticeExiste(Vertice v) {
+	protected void verificarQueElVerticeExiste(Vertice v) {
 		if (!elVerticeExiste(v)) {
 			throw new IllegalArgumentException(v + " no es un vértice de este grafo.");
 		}
 	}
 
-	private void verificarQueElVerticeNoExiste(Vertice v) {
+	protected void verificarQueElVerticeNoExiste(Vertice v) {
 		if (elVerticeExiste(v)) {
 			throw new IllegalArgumentException(v + " ya es un vértice de este grafo.");
 		}
@@ -176,7 +165,7 @@ public class Grafo {
 	 * devuelve la arista A-B, entonces NO devolverá la arista B-A. Este diseño se
 	 * pensó en la posible necesidad de querer mostrar por consola las aristas de un
 	 * grafo o de querer graficarlas, haciendo que cada arista sea iterada una única
-	 * vez.
+	 * vez, evitando la redundancia de datos.
 	 * 
 	 * @return un iterador de las aristas de este grafo
 	 */
@@ -223,11 +212,51 @@ public class Grafo {
 		};
 	}
 
+	Comparator<Vertice> comparadorPorPeso(){
+		return new Comparator<Vertice>() {
+			@Override
+			public int compare(Vertice o1, Vertice o2) {
+				return o1.compareTo(o2);
+			}
+		};
+	}
+
+	Comparator<Vertice> comparadorPorCantidadVecinos(){
+		return new Comparator<Vertice>() {
+			@Override
+			public int compare(Vertice o1, Vertice o2) {
+				int x = vecinosDelVertice(o1).size() - vecinosDelVertice(o2).size();
+				if (x == 0)
+					x = o1.compareTo(o2);
+				return x;
+			}
+		};
+	}
+
 	/**
-	 * @return la clique más pesada de este grafo
+	 * Devuelve la clique más pesada, donde el algoritmo de evaluación
+	 * ordena los vértices del grafo de acuerdo su peso.
+	 * Este criterio se basa en que la clique más pesada debe
+	 * contener a los vértices más pesados.
+	 * @return Devuelve la clique más pesada ordenando los vértices del más al menos pesado
 	 */
-	public Clique cliqueMasPesada() {
-		return SolverCliqueMasPesada.cliqueMasPesada(this);
+	public Clique cliqueMasPesadaOrdenandoPorPeso() {
+		return new SolverCliqueMasPesada(this,
+				comparadorPorPeso()).cliqueMasPesada();
+	}
+
+	/**
+	 * Devuelve la clique más pesada, donde el algoritmo de evaluación
+	 * ordena los vértices del grafo de acuerdo la cantidad de vecinos de cada uno.
+	 * Este criterio se basa en que, mientras más vértices, más peso tendrá la clique,
+	 * entonces busca los vértices con más vecinos, con mayor posibilidad de obtener
+	 * cliques de tamaño grandes.
+	 * @return Devuelve la clique más pesada ordenando los vértices
+	 * de los que tienen más a menos vecinos
+	 */
+	public Clique cliqueMasPesadaOrdenandoPorCantidadVertices() {
+		return new SolverCliqueMasPesada(this,
+				comparadorPorCantidadVecinos()).cliqueMasPesada();
 	}
 
 }
