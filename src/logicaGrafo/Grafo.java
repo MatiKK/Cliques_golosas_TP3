@@ -63,18 +63,6 @@ public class Grafo {
 	}
 
 	/**
-	 * Devuelve el peso de un vértice de este grafo
-	 * 
-	 * @param v vértice del cual se quiere saber su peso
-	 * @return el peso del vértice dado
-	 * @throws IllegalArgumentException si el vértice no es parte del grafo
-	 */
-	public double pesoDeVertice(Vertice v) {
-		verificarQueElVerticeExiste(v);
-		return v.obtenerPeso();
-	}
-
-	/**
 	 * Agrega una arista entre dos vértices
 	 * 
 	 * @param v1 primer vértice
@@ -121,13 +109,13 @@ public class Grafo {
 		return listaVecinos.containsKey(v);
 	}
 
-	private void verificarQueElVerticeExiste(Vertice v) {
+	protected void verificarQueElVerticeExiste(Vertice v) {
 		if (!elVerticeExiste(v)) {
 			throw new IllegalArgumentException(v + " no es un vértice de este grafo.");
 		}
 	}
 
-	private void verificarQueElVerticeNoExiste(Vertice v) {
+	protected void verificarQueElVerticeNoExiste(Vertice v) {
 		if (elVerticeExiste(v)) {
 			throw new IllegalArgumentException(v + " ya es un vértice de este grafo.");
 		}

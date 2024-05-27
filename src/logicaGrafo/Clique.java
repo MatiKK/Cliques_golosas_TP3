@@ -32,6 +32,29 @@ public class Clique extends Grafo {
 	}
 
 	@Override
+	public void agregarVertices(Vertice... vertices) {
+		for (Vertice v: vertices)
+			agregarVertice(v);
+	}
+
+	@Override
+	public void agregarVertice(Vertice v) {
+		vertices.add(v);
+	}
+
+	@Override
+	public boolean existeAristaEntreVertices(Vertice v1, Vertice v2) {
+		super.verificarQueElVerticeExiste(v1);
+		super.verificarQueElVerticeExiste(v2);
+		return true;
+	}
+
+	@Override
+	public void agregarAristaEntreVertices(Vertice v1, Vertice v2){
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public int cantidadVertices() {
 		return vertices.size();
 	}
