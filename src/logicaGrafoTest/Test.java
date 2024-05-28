@@ -25,7 +25,7 @@ public class Test {
 		System.out.println("\n---------------------------------------");
 		System.out.println("Ordenando por cantidad de vértices\n");
 
-		clique = g.cliqueMasPesadaOrdenandoPorCantidadVertices();
+		clique = g.cliqueMasPesadaOrdenandoPorCantidadVecinos();
 		clique.data();
 
 	}

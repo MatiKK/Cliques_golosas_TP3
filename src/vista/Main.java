@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -12,11 +13,9 @@ import javax.swing.SwingUtilities;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
-import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 
-import logicaGrafo.Grafo;
+import controlador.Controlador;
 import logicaGrafo.Vertice;
-
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -25,12 +24,9 @@ public class Main {
 
 	private JFrame frame;
 	private JMapViewer mapViewer;
-	
-	private Grafo grafo;
-	private int numeroVertice;
-	
-	
-	
+	private Controlador control;
+	private JComboBox<Vertice> combobox1;
+	private JComboBox<Vertice> combobox2;
 
 	/**
 	 * Launch the application.
@@ -53,7 +49,7 @@ public class Main {
 	 */
 	public Main() {
 		mapViewer = new JMapViewer();
-		grafo = new Grafo();
+		control = new Controlador(this.mapViewer);
 		initialize();
 	}
 
@@ -81,24 +77,29 @@ public class Main {
 		mapViewer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 2) {
+
 					String nombreVertice;
-					String textoVertice;
-					numeroVertice++;	
-					nombreVertice = Integer.toString(numeroVertice);
-					textoVertice = JOptionPane.showInputDialog("Ha ingresado el vertice " + nombreVertice);
-					double valorDefault = 0;
-					
+					double pesoVertice;
+
+					nombreVertice = JOptionPane.showInputDialog("Nombre para el vertice");
+					if (nombreVertice == null || nombreVertice.isEmpty() || nombreVertice.isBlank()) {
+						control.mostrarAlerta("Nombre inválido");
+						return;
+					}
+
+					try {
+						pesoVertice = Double.parseDouble(
+								JOptionPane.showInputDialog("Peso para el vertice " + nombreVertice)
+								);
+					} catch(NumberFormatException ex) {
+						control.mostrarAlerta("Número inválido");
+						return;
+					}
+
 					Point punto = e.getPoint();
 					Coordinate c = (Coordinate) mapViewer.getPosition(punto);
-					
-					Vertice verticeNuevo = new Vertice(nombreVertice,valorDefault,c); 
-					
-					grafo.agregarVertice(verticeNuevo);
-					
-					dibujoVertice(verticeNuevo);
-					
-					System.out.println("hay : " + grafo.cantidadVertices() + " cantidad de vertices en el grafo");
-
+					Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c); 
+					control.nuevoVertice(verticeNuevo);
 				}
 			}
 		});		
@@ -106,20 +107,13 @@ public class Main {
 		mapPanel.add(mapViewer, BorderLayout.CENTER);
 		
 	}
-	
-	public void dibujoVertice(Vertice v)
-	{
-		Coordinate c;
-		String text;
-		
-		c = v.getCordenada();
-		text = v.toString();
-				
-		 // Crear un marcador para el vértice
-        MapMarkerDot marcador = new MapMarkerDot(text, c);
-        //marcador.setColor(Color.YELLOW);
 
-        // Agregar el marcador al JMapViewer
-        mapViewer.addMapMarker(marcador);
-	}
+	//TODO
+	/**
+	 * Agregar un boton para agregar arista
+	 * donde salga una pantallita
+	 * y salgan los dos comboboxes de los vértices
+	 * y el usuario elige 2 para unir
+	 */
+
 }

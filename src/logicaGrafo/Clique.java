@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  * Una clique es un conjunto de vértices donde todos los vértoces son vecinos
  * entre sí. Un grafo puede tener cliques como subgrafos.
  */
-public class Clique {
+public class Clique extends RedVertices {
 
 	private final ArrayList<Vertice> vertices;
 	private double peso;
@@ -29,38 +29,32 @@ public class Clique {
 		}
 	}
 
-	/**
-	 * @return la cantidad de vertices de esta clique
-	 */
+	public void agregarVertice(Vertice v) {
+		if (vertices.contains(v))
+			throw new IllegalArgumentException();
+		vertices.add(v);
+	}
+
+	public void agregarAristaEntreVertices(Vertice v1, Vertice v2) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void quitarAristaEntreVertices(Vertice v1, Vertice v2) {
+		throw new UnsupportedOperationException();
+	}
+
 	public int cantidadVertices() {
 		return vertices.size();
 	}
 
-	/**
-	 * @return el peso de esta clique
-	 */
 	public double peso() {
 		return peso;
 	}
 
-	/**
-	 * @return los vértices de esta clique
-	 */
 	public Collection<Vertice> vertices() {
 		return vertices;
 	}
 
-	/**
-	 * Devuelve un {@link java.util.Iterator} de las aristas de esta clique. Está
-	 * implementado de tal forma que no devuelve una misma arista dos veces, es
-	 * decir, si existe una arista entre los vertices A y B, si este iterador
-	 * devuelve la arista A-B, entonces NO devolverá la arista B-A. Este diseño se
-	 * pensó en la posible necesidad de querer mostrar por consola las aristas de
-	 * una cluque o de querer graficarlas, haciendo que cada arista sea iterada
-	 * una única vez, evitando la redundancia de datos.
-	 * 
-	 * @return un iterador de las aristas de este grafo
-	 */
 	public Iterator<Arista> aristasIterator() {
 		return new Iterator<Arista>() {
 			private int cantidadVertices = cantidadVertices(),
