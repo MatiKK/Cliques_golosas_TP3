@@ -2,6 +2,8 @@ package vista;
 
 import java.awt.EventQueue;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -25,8 +27,8 @@ public class Main {
 	private JFrame frame;
 	private JMapViewer mapViewer;
 	private Controlador control;
-	private JComboBox<Vertice> combobox1;
-	private JComboBox<Vertice> combobox2;
+	private JComboBox<Vertice> comboBox1;
+	private JComboBox<Vertice> comboBox2;
 
 	/**
 	 * Launch the application.
@@ -69,8 +71,16 @@ public class Main {
 		JLabel lblDobleClicDerecho = new JLabel("Doble clic derecho para agregar vertice");
 		panel.add(lblDobleClicDerecho);
 		frame.getContentPane().add(mapPanel, BorderLayout.CENTER);
-			
-		
+
+		comboBox1 = new JComboBox<>();
+		comboBox2 = new JComboBox<>();
+
+		comboBox1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actualizarComboBox2();
+			}
+		});
+
 		mapViewer.setZoom(5);
 		mapViewer.setTileSource(new org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource.Mapnik());
 		mapViewer.setDisplayPosition(new Coordinate(-40.6037, -65.3816), 4);		
@@ -100,12 +110,24 @@ public class Main {
 					Coordinate c = (Coordinate) mapViewer.getPosition(punto);
 					Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c); 
 					control.nuevoVertice(verticeNuevo);
+					comboBox1.addItem(verticeNuevo);
+					actualizarComboBox2();
 				}
 			}
 		});		
 		
 		mapPanel.add(mapViewer, BorderLayout.CENTER);
 		
+	}
+
+	private void actualizarComboBox2() {
+		comboBox2.removeAllItems();
+		Vertice elegidoEnCB1 = (Vertice) comboBox1.getSelectedItem();
+		for (int i = 0; i < comboBox1.getItemCount(); i++) {
+			Vertice v = (Vertice) comboBox1.getItemAt(i);
+			if (!v.equals(elegidoEnCB1))
+				comboBox2.addItem(v);
+		}
 	}
 
 	//TODO
