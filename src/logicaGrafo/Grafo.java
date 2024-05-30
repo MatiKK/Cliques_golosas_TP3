@@ -4,7 +4,6 @@ public abstract class Grafo<T> {
 
 	public abstract int cantidadVertices();
 
-
 	/**
 	 * @return los vértices de este grafo
 	 */
@@ -27,4 +26,5 @@ public abstract class Grafo<T> {
 	 * Usar solo para muestras en consola
 	 */
 	public abstract void data();
+
 }
