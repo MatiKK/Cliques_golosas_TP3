@@ -25,18 +25,18 @@ import logicaGrafo.*;
 @SuppressWarnings("unused")
 public class Controlador {
 
-	private Grafo grafo;
-	private Clique cliqueMasPesada;
+	private GrafoPonderado<Vertice> grafo;
+	private Clique<Vertice> cliqueMasPesada;
 	private JMapViewer map;
 
 	public Controlador(JMapViewer map) {
 		this.map = map;
-		grafo = new Grafo();
+		grafo = new GrafoPonderado<>();
 		cliqueMasPesada = null;
 	}
 
 	public void nuevoVertice(Vertice v) {
-		grafo.agregarVertice(v);
+		grafo.agregarVertice(v, v.obtenerPeso());
 		dibujarVertice(v);
 		System.out.println("----------------------");
 		grafo.data();
@@ -44,7 +44,7 @@ public class Controlador {
 
 	public void nuevaAristaEntreVertices(Vertice v1, Vertice v2) {
 		grafo.agregarAristaEntreVertices(v1, v2);
-		dibujarLineaEntrePuntos(v1.getCordenada(), v2.getCordenada());
+		dibujarLineaEntrePuntos(v1.obtenerCoordenada(), v2.obtenerCoordenada());
 		System.out.println("----------------------");
 		grafo.data();
 	}
@@ -80,11 +80,11 @@ public class Controlador {
 		map.removeAllMapMarkers();
 	}
 
-	private void dibujarRedVertices(RedVertices g) {
+	private void dibujarRedVertices(Grafo<Vertice> g) {
 		limpiarMapa();
 		for (Vertice v: g.vertices())
 			dibujarVertice(v);
-		Iterator<Arista> it = g.aristasIterator();
+		Iterator<Arista<Vertice>> it = g.aristasIterator();
 		while (it.hasNext()) {
 			dibujarArista(it.next());
 		}
@@ -95,7 +95,7 @@ public class Controlador {
 		Coordinate c;
 		String text;
 		
-		c = v.getCordenada();
+		c = v.obtenerCoordenada();
 		text = v.toString();
 		
 		// Crear un marcador para el vértice
@@ -106,11 +106,11 @@ public class Controlador {
 		map.addMapMarker(marcador);
 	}
 	
-	private void dibujarArista(Arista arista) {
+	private void dibujarArista(Arista<Vertice> arista) {
 		Vertice v1 = arista.verticeInicio();
 		Vertice v2 = arista.verticeDestino();
-		Coordinate c1 = v1.getCordenada();
-		Coordinate c2 = v2.getCordenada();
+		Coordinate c1 = v1.obtenerCoordenada();
+		Coordinate c2 = v2.obtenerCoordenada();
 		dibujarLineaEntrePuntos(c1,c2);
 	}
 

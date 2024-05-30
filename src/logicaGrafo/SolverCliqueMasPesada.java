@@ -7,22 +7,24 @@ import java.util.Comparator;
 /**
  * Clase Solver para la búsqueda de la clique más pesada de un grafo.
  */
-public class SolverCliqueMasPesada {
+public class SolverCliqueMasPesada<T extends Comparable<T>> {
 
-	private Grafo grafo;
-	private ArrayList<Vertice> verticesDeLaClique;
-	private ArrayList<Vertice> verticesDelGrafo;
-	private Comparator<Vertice> comparadorVertices;
+	private GrafoPonderado<T> grafo;
+	private ArrayList<T> verticesDeLaClique;
+	private ArrayList<T> verticesDelGrafo;
+	private Comparator<T> comparadorVertices;
+	private double pesoClique;
 
 	/**
 	 *  Para evitar iterar todos los vértices cuando no sea necesario
 	 */
 	private int cantidadVecinosDelMayorVertice;
 
-	SolverCliqueMasPesada(Grafo g, Comparator<Vertice> comparador) {
+	SolverCliqueMasPesada(GrafoPonderado<T> g, Comparator<T> comparador) {
 		if (g.cantidadVertices() == 0) {
 			throw new IllegalArgumentException("Grafo sin vértices");
 		}
+		pesoClique = 0;
 		grafo = g;
 		verticesDelGrafo = new ArrayList<>(grafo.vertices());
 		comparadorVertices = comparador;
@@ -33,11 +35,11 @@ public class SolverCliqueMasPesada {
 	/**
 	 * @return la clique más pesada del grafo de este Solver
 	 */
-	Clique cliqueMasPesada() {
+	Clique<T> cliqueMasPesada() {
 		Collections.sort(verticesDelGrafo, comparadorVertices);
 		Collections.reverse(verticesDelGrafo);
 		resolver();
-		return new Clique(verticesDeLaClique);
+		return new Clique<>(verticesDeLaClique, pesoClique);
 	}
 
 	/**
@@ -48,14 +50,16 @@ public class SolverCliqueMasPesada {
 	 */
 	private void resolver() {
 
-		Vertice mayorVertice = verticesDelGrafo.get(0);
+		T mayorVertice = verticesDelGrafo.get(0);
+		pesoClique += grafo.pesoDeVertice(mayorVertice);
 		cantidadVecinosDelMayorVertice = grafo.vecinosDelVertice(mayorVertice).size();
 		verticesDeLaClique.add(mayorVertice);
 
 		for (int i = 1; i < verticesDelGrafo.size(); i++) {
-			Vertice v = verticesDelGrafo.get(i);
-			if (siAgregoEsteVerticeSigueSiendoUnaClique(verticesDeLaClique, v)) {
+			T v = verticesDelGrafo.get(i);
+			if (siAgregoEsteVerticeSigueSiendoUnaClique(v)) {
 				verticesDeLaClique.add(v);
+				pesoClique += grafo.pesoDeVertice(v);
 				if (verticesDeLaClique.size() == cantidadVecinosDelMayorVertice + 1)
 					return;
 			}
@@ -72,8 +76,8 @@ public class SolverCliqueMasPesada {
 	 * @return {@code true} si la sub-clique seguiría siendo una clique si se añade
 	 *         el vérice dado
 	 */
-	private boolean siAgregoEsteVerticeSigueSiendoUnaClique(ArrayList<Vertice> subClique, Vertice v) {
-		for (Vertice vertice : subClique) {
+	private boolean siAgregoEsteVerticeSigueSiendoUnaClique(T v) {
+		for (T vertice : verticesDeLaClique) {
 			if (!grafo.vecinosDelVertice(vertice).contains(v))
 				return false;
 		}

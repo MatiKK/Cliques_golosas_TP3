@@ -7,12 +7,12 @@ package logicaGrafo;
  * {@link java.util.Iterator}, diseñado específicamente para que una misma
  * arista no sea devuelta dos veces.
  */
-public class Arista {
+public class Arista<T> {
 
-	private Vertice inicio;
-	private Vertice destino;
+	private T inicio;
+	private T destino;
 
-	Arista(Vertice in, Vertice dest) {
+	Arista(T in, T dest) {
 		inicio = in;
 		destino = dest;
 	}
@@ -20,26 +20,26 @@ public class Arista {
 	/**
 	 * @return el primer vértice extremo de esta arista
 	 */
-	public Vertice verticeInicio() {
+	public T verticeInicio() {
 		return inicio;
 	}
 
 	/**
 	 * @return el segundo vértice extremo de esta arista
 	 */
-	public Vertice verticeDestino() {
+	public T verticeDestino() {
 		return destino;
 	}
 
 	@Override
 	public String toString() {
-		return inicio + "(" + inicio.obtenerPeso() + ")--->" + destino + "(" + destino.obtenerPeso() + ")";
+		return inicio + " ---> " + destino;
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof Arista) {
-			Arista ar = (Arista) o;
+		if (o instanceof Arista<?>) {
+			Arista<?> ar = (Arista<?>) o;
 			return (inicio.equals(ar.destino) && destino.equals(ar.inicio))
 					|| (inicio.equals(ar.inicio) && destino.equals(ar.destino));
 		}

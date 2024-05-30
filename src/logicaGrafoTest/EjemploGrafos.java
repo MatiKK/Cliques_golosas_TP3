@@ -1,36 +1,32 @@
 package logicaGrafoTest;
 
-import org.openstreetmap.gui.jmapviewer.Coordinate;
-
-import logicaGrafo.Grafo;
-import logicaGrafo.Vertice;
+import logicaGrafo.GrafoPonderado;
 
 public class EjemploGrafos {
 
 	/**
 	 * Grafo de la diapositiva del TP3
 	 */
-	private static Grafo grafo1;
-	private static Grafo grafo2;
-	private static Grafo grafo3;
-	private static Coordinate coordenada = new Coordinate (10.0,10.0);
+	private static GrafoPonderado<Integer> grafo1;
+	private static GrafoPonderado<Integer> grafo2;
+	private static GrafoPonderado<Integer> grafo3;
 
 	/**
 	 * @return Grafo de la diapositiva del TP3
 	 */
-	public static Grafo grafo1() {
+	public static GrafoPonderado<Integer> grafo1() {
 		if (grafo1 == null)
 			inicializarGrafo1();
 		return grafo1;
 	}
 
-	public static Grafo grafo2() {
+	public static GrafoPonderado<Integer> grafo2() {
 		if (grafo2 == null)
 			inicializarGrafo2();
 		return grafo2;
 	}
 
-	public static Grafo grafo3() {
+	public static GrafoPonderado<Integer> grafo3() {
 		if (grafo3 == null)
 			inicializarGrafo3();
 		return grafo3;
@@ -38,16 +34,20 @@ public class EjemploGrafos {
 
 	private static void inicializarGrafo1() {
 		// Grafo de la diapositiva del TP3
-		Grafo g = new Grafo();
+		GrafoPonderado<Integer> g = new GrafoPonderado<>();
 
-		Vertice v1 = new Vertice(1, 11.0,coordenada);
-		Vertice v2 = new Vertice(2, 5.5,coordenada);
-		Vertice v3 = new Vertice(3, 1.1,coordenada);
-		Vertice v4 = new Vertice(4, 7.0,coordenada);
-		Vertice v5 = new Vertice(5, 2.5,coordenada);
-		Vertice v6 = new Vertice(6, 3.5,coordenada);
-
-		g.agregarVertices(v1, v2, v3, v4, v5, v6);
+		Integer v1 = 1;
+		g.agregarVertice(v1,11);
+		Integer v2 = 2;
+		g.agregarVertice(v2,5.5);
+		Integer v3 = 3;
+		g.agregarVertice(v3,1.1);
+		Integer v4 = 4;
+		g.agregarVertice(v4,7);
+		Integer v5 = 5;
+		g.agregarVertice(v5,2.5);
+		Integer v6 = 6;
+		g.agregarVertice(v6,3.5);
 
 		g.agregarAristaEntreVertices(v1, v2);
 		g.agregarAristaEntreVertices(v1, v4);
@@ -66,15 +66,19 @@ public class EjemploGrafos {
 	}
 
 	private static void inicializarGrafo2() {
-		Grafo g = new Grafo();
+		GrafoPonderado<Integer> g = new GrafoPonderado<>();
 
-		Vertice v1 = new Vertice(1, 50,coordenada);
-		Vertice v2 = new Vertice(2, 100,coordenada);
-		Vertice v3 = new Vertice(3, 30,coordenada);
-		Vertice v4 = new Vertice(4, 10,coordenada);
-		Vertice v5 = new Vertice(5, 8,coordenada);
+		Integer v1 = 1;
+		Integer v2 = 2;
+		Integer v3 = 3;
+		Integer v4 = 4;
+		Integer v5 = 5;
 
-		g.agregarVertices(v1, v2, v3, v4, v5);
+		g.agregarVertice(v1,  50);
+		g.agregarVertice(v2,  100);
+		g.agregarVertice(v3,  30);
+		g.agregarVertice(v4,  10);
+		g.agregarVertice(v5,  8);
 
 		g.agregarAristaEntreVertices(v1, v2);
 		g.agregarAristaEntreVertices(v2, v3);
@@ -90,20 +94,29 @@ public class EjemploGrafos {
 	}
 
 	private static void inicializarGrafo3() {
-		Grafo g = new Grafo();
+		GrafoPonderado<Integer> g = new GrafoPonderado<>();
 
-		Vertice v0 = new Vertice(0, 4,coordenada);
-		Vertice v1 = new Vertice(1, 3,coordenada);
-		Vertice v2 = new Vertice(2, 4,coordenada);
-		Vertice v3 = new Vertice(3, 1,coordenada);
-		Vertice v4 = new Vertice(4, 3,coordenada);
-		Vertice v5 = new Vertice(5, 1,coordenada);
-		Vertice v6 = new Vertice(6, 3,coordenada);
-		Vertice v7 = new Vertice(7, 1,coordenada);
-		Vertice v8 = new Vertice(8, 2,coordenada);
-		Vertice v9 = new Vertice(9, 2,coordenada);
+		Integer v0 = 0;
+		Integer v1 = 1;
+		Integer v2 = 2;
+		Integer v3 = 3;
+		Integer v4 = 4;
+		Integer v5 = 5;
+		Integer v6 = 6;
+		Integer v7 = 7;
+		Integer v8 = 8;
+		Integer v9 = 9;
 
-		g.agregarVertices(v0, v1, v2, v3, v4, v5, v6, v7, v8, v9);
+		g.agregarVertice(v0, 4);
+		g.agregarVertice(v1, 3);
+		g.agregarVertice(v2, 4);
+		g.agregarVertice(v3, 1);
+		g.agregarVertice(v4, 3);
+		g.agregarVertice(v5, 1);
+		g.agregarVertice(v6, 3);
+		g.agregarVertice(v7, 1);
+		g.agregarVertice(v8, 2);
+		g.agregarVertice(v9, 2);
 
 		g.agregarAristaEntreVertices(v7, v2);
 		g.agregarAristaEntreVertices(v2, v5);

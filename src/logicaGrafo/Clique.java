@@ -10,10 +10,10 @@ import java.util.NoSuchElementException;
  * Una clique es un conjunto de vértices donde todos los vértoces son vecinos
  * entre sí. Un grafo puede tener cliques como subgrafos.
  */
-public class Clique extends RedVertices {
+public class Clique<T> extends Grafo<T>{
 
-	private final ArrayList<Vertice> vertices;
-	private double peso;
+	private final ArrayList<T> vertices;
+	private final double peso;
 
 	/**
 	 * Crea una clique a partir de los vértices dados
@@ -21,26 +21,12 @@ public class Clique extends RedVertices {
 	 * @param verticesClique vértices que se desean para la clique
 	 * @throws NullPointerException si vericesClique es {@code null}
 	 */
-	public Clique(ArrayList<Vertice> verticesClique) {
+	Clique(ArrayList<T> verticesClique, double peso) {
 		this.vertices = new ArrayList<>();
-		for (Vertice v : verticesClique) {
+		for (T v : verticesClique) {
 			vertices.add(v);
-			peso += v.obtenerPeso();
 		}
-	}
-
-	public void agregarVertice(Vertice v) {
-		if (vertices.contains(v))
-			throw new IllegalArgumentException();
-		vertices.add(v);
-	}
-
-	public void agregarAristaEntreVertices(Vertice v1, Vertice v2) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void quitarAristaEntreVertices(Vertice v1, Vertice v2) {
-		throw new UnsupportedOperationException();
+		this.peso = peso;
 	}
 
 	public int cantidadVertices() {
@@ -51,12 +37,12 @@ public class Clique extends RedVertices {
 		return peso;
 	}
 
-	public Collection<Vertice> vertices() {
+	public Collection<T> vertices() {
 		return vertices;
 	}
 
-	public Iterator<Arista> aristasIterator() {
-		return new Iterator<Arista>() {
+	public Iterator<Arista<T>> aristasIterator() {
+		return new Iterator<Arista<T>>() {
 			private int cantidadVertices = cantidadVertices(),
 						ind1 = 0,
 						ind2 = 0;
@@ -70,16 +56,16 @@ public class Clique extends RedVertices {
 			}
 
 			@Override
-			public Arista next() {
+			public Arista<T> next() {
 				try {
 					ind2++;
 					if (ind2 == cantidadVertices) {
 						ind1++;
 						ind2 = ind1 + 1;
 					}
-					Vertice v1 = vertices.get(ind1);
-					Vertice v2 = vertices.get(ind2);
-					return new Arista(v1, v2);
+					T v1 = vertices.get(ind1);
+					T v2 = vertices.get(ind2);
+					return new Arista<>(v1, v2);
 				} catch (IndexOutOfBoundsException e) {
 					throw new NoSuchElementException();
 				}
@@ -91,7 +77,7 @@ public class Clique extends RedVertices {
 		System.out.println("Clique de peso " + peso());
 		System.out.println("Vertices: " + vertices());
 		System.out.println("Aristas:");
-		Iterator<Arista> aristas = aristasIterator();
+		Iterator<Arista<T>> aristas = aristasIterator();
 		while (aristas.hasNext()) {
 			System.out.println(aristas.next());
 		}

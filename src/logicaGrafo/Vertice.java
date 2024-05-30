@@ -3,8 +3,7 @@ package logicaGrafo;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 /**
- * Clase que representa el vértice de un grafo. La clase {@link Grafo} solo
- * trabaja con instancias de esta clase.
+ * Clase que representa el vértice de un grafo con una coordenada sobre un mapa.
  */
 public class Vertice implements Comparable<Vertice> {
 
@@ -18,6 +17,7 @@ public class Vertice implements Comparable<Vertice> {
 	 * @param n nombre del vértice (si se pasa un objeto, se usará su representación
 	 *          {@link Object#toString()})
 	 * @param p peso del vertice
+	 * @param cord coordenada del vértice sobre el mapa
 	 * @throws IllegalArgumentException si el peso es negativo
 	 */
 	public Vertice(Object n, double p, Coordinate cord) {
@@ -30,14 +30,16 @@ public class Vertice implements Comparable<Vertice> {
 	}
 
 	/**
-	 * 
 	 * @return el peso del vértice
 	 */
 	public double obtenerPeso() {
 		return peso;
 	}
 	
-	public Coordinate getCordenada() {
+	/**
+	 * @return la coordenada del vértice
+	 */
+	public Coordinate obtenerCoordenada() {
 		return coordenada;
 	}
 	
