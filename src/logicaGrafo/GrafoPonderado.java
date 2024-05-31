@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  * Clase que representa un grafo, donde sus vértices poseen un peso (positivo).
@@ -17,14 +15,14 @@ import java.util.TreeSet;
  */
 public class GrafoPonderado<T extends Comparable<T>> extends Grafo<T>{
 
-	private TreeMap<T, TreeSet<T>> listaVecinos;
+	private HashMap<T, HashSet<T>> listaVecinos;
 	private HashMap<T, Double> pesos;
 
 	/**
 	 * Crea un grafo sin vértices iniciales
 	 */
 	public GrafoPonderado() {
-		listaVecinos = new TreeMap<>();
+		listaVecinos = new HashMap<>();
 		pesos = new HashMap<>();
 	}
 
@@ -60,7 +58,7 @@ public class GrafoPonderado<T extends Comparable<T>> extends Grafo<T>{
 	}
 
 	private void agregarVerticeSinChequear(T v, double peso) {
-		listaVecinos.put(v, new TreeSet<T>());
+		listaVecinos.put(v, new HashSet<T>());
 		pesos.put(v, peso);
 	}
 
@@ -131,7 +129,7 @@ public class GrafoPonderado<T extends Comparable<T>> extends Grafo<T>{
 	}
 
 	public Collection<T> vertices() {
-		return new TreeSet<>(listaVecinos.keySet());
+		return new HashSet<>(listaVecinos.keySet());
 	}
 
 	/**
@@ -141,7 +139,7 @@ public class GrafoPonderado<T extends Comparable<T>> extends Grafo<T>{
 	 * @return los vecinos del vértice
 	 * @throws IllegalArgumentException si el vértice no es parte de este grafo
 	 */
-	public TreeSet<T> vecinosDelVertice(T v) {
+	public HashSet<T> vecinosDelVertice(T v) {
 		verificarQueElVerticeExiste(v);
 		return listaVecinos.get(v);
 	}
