@@ -8,6 +8,7 @@ import java.awt.Polygon;
 import java.awt.Stroke;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -20,7 +21,9 @@ import org.openstreetmap.gui.jmapviewer.Style;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
 
+import logicaGrafo.Arista;
 import logicaGrafo.*;
+import vista.Main;
 
 @SuppressWarnings("unused")
 public class Controlador {
@@ -28,6 +31,10 @@ public class Controlador {
 	private Grafo grafo;
 	private Clique cliqueMasPesada;
 	private JMapViewer map;
+	
+	private Set<Arista> aristasG;
+	private Main vista;
+	
 
 	public Controlador(JMapViewer map) {
 		this.map = map;
@@ -48,6 +55,8 @@ public class Controlador {
 		System.out.println("----------------------");
 		grafo.data();
 	}
+
+	
 
 	public void dibujarGrafoOriginal() {
 		dibujarRedVertices(grafo);
@@ -117,5 +126,40 @@ public class Controlador {
 	private void dibujarLineaEntrePuntos(Coordinate c1, Coordinate c2) {
 		map.addMapPolygon(new MapPolygonImpl(c1, c2, c1));
 	}
+	
+	
+	/**
+	 * agrego nueva arista al grafo
+	 * 
+	 * @param p1
+	 * @param p2
+	 * @param peso
+	 */
+    public void nuevaArista(Vertice p1, Vertice p2, double peso) {
+    	try {
+    		System.out.println("el valor de p1 es: " + p1);
+    		System.out.println("el valor de p2 es: " + p2);
+    		grafo.agregarAristaEntreVertices(p1, p2, peso);
+    		Arista ar = new Arista(p1,p2,peso);
+    		if (agregarArista(ar)) {
+    			//graficarArista(vista.getMapViewer(), ar);
+    			dibujarArista(ar);
+    		} else {
+    			// No enconté forma de poder hacerlo
+    			vista.mostrarAlerta("¡No puede cambiar el peso de la arista!");
+    		}
+    	} catch (IllegalArgumentException e) {
+    		vista.mostrarAlerta("¡No puede añadir una relación entre un mismo vértice!");
+    	}
+    }
+    
+    public boolean agregarArista(Arista ar) {
+    	return aristasG.add(ar);
+    }
+    
+    
+    
+	
+	
 
 }

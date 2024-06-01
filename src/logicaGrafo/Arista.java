@@ -11,11 +11,21 @@ public class Arista {
 
 	private Vertice inicio;
 	private Vertice destino;
+	private double peso;
 
 	Arista(Vertice in, Vertice dest) {
 		inicio = in;
 		destino = dest;
 	}
+	
+	public Arista(Vertice in, Vertice dest, double pe) {
+		inicio = in;
+		destino = dest;
+		peso = pe;
+		
+	}
+	
+	
 
 	/**
 	 * @return el primer vértice extremo de esta arista

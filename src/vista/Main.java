@@ -7,10 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -26,10 +28,13 @@ public class Main {
 
 	private JFrame frame;
 	private JMapViewer mapViewer;
-	private Controlador control;
+	private Controlador controlador;
 	private JComboBox<Vertice> comboBox1;
 	private JComboBox<Vertice> comboBox2;
-
+	
+	private JFrame frameParaElegirRelacion;
+	private JTextField valorPesoEntradaUser;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -51,7 +56,7 @@ public class Main {
 	 */
 	public Main() {
 		mapViewer = new JMapViewer();
-		control = new Controlador(this.mapViewer);
+		controlador = new Controlador(this.mapViewer);
 		initialize();
 	}
 
@@ -80,6 +85,7 @@ public class Main {
 				actualizarComboBox2();
 			}
 		});
+		
 
 		mapViewer.setZoom(5);
 		mapViewer.setTileSource(new org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource.Mapnik());
@@ -93,7 +99,7 @@ public class Main {
 
 					nombreVertice = JOptionPane.showInputDialog("Nombre para el vertice");
 					if (nombreVertice == null || nombreVertice.isEmpty() || nombreVertice.isBlank()) {
-						control.mostrarAlerta("Nombre inválido");
+						controlador.mostrarAlerta("Nombre inválido");
 						return;
 					}
 
@@ -102,14 +108,14 @@ public class Main {
 								JOptionPane.showInputDialog("Peso para el vertice " + nombreVertice)
 								);
 					} catch(NumberFormatException ex) {
-						control.mostrarAlerta("Número inválido");
+						controlador.mostrarAlerta("Número inválido");
 						return;
 					}
 
 					Point punto = e.getPoint();
 					Coordinate c = (Coordinate) mapViewer.getPosition(punto);
 					Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c); 
-					control.nuevoVertice(verticeNuevo);
+					controlador.nuevoVertice(verticeNuevo);
 					comboBox1.addItem(verticeNuevo);
 					actualizarComboBox2();
 				}
@@ -118,7 +124,10 @@ public class Main {
 		
 		mapPanel.add(mapViewer, BorderLayout.CENTER);
 		
+		crearFrameAgregarRelacion();
+		
 	}
+
 
 	private void actualizarComboBox2() {
 		comboBox2.removeAllItems();
@@ -137,5 +146,47 @@ public class Main {
 	 * y salgan los dos comboboxes de los vértices
 	 * y el usuario elige 2 para unir
 	 */
+	
+	private void crearFrameAgregarRelacion() {
+		frameParaElegirRelacion = new JFrame();
+		JPanel panel = new JPanel();
+		panel.add(comboBox1);
+		panel.add(comboBox2);
+		JLabel lblNewLabel_2 = new JLabel("       Indique peso:");
+		panel.add(lblNewLabel_2);
+		valorPesoEntradaUser = new JTextField();
+		panel.add(valorPesoEntradaUser);
+		valorPesoEntradaUser.setColumns(10);
+
+		JButton cargarRelacion = new JButton("Cargar relación");
+		panel.add(cargarRelacion);
+		cargarRelacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cargarNuevaArista();				
+			}
+		});
+		frameParaElegirRelacion.setBounds(100,100,550,200);
+		frameParaElegirRelacion.add(panel);
+		frameParaElegirRelacion.setVisible(true);
+		
+	}
+	
+	private void cargarNuevaArista() {
+
+		double peso = Double.valueOf(valorPesoEntradaUser.getText());
+		Vertice p1 = (Vertice) comboBox1.getSelectedItem();
+		Vertice p2 = (Vertice) comboBox2.getSelectedItem();
+		controlador.nuevaAristaEntreVertices(p1,p2);
+		//controlador.nuevaArista(p1, p2, peso);
+
+	}
+	
+	public JMapViewer getMapViewer() {
+		return mapViewer;
+	}
+	
+	public void mostrarAlerta(String mensaje) {
+		JOptionPane.showMessageDialog(null, mensaje);
+	}
 
 }
