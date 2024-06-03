@@ -72,7 +72,31 @@ public class Main {
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
+
+		JButton botonAgregarArista = new JButton("Agregar relación");
+		botonAgregarArista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frameParaElegirRelacion.setVisible(true);
+			}
+		});
+		panel.add(botonAgregarArista);
+
+		JButton botonMostrarClique = new JButton("Clique más pesada");
+		botonMostrarClique.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.dibujarCliqueMasPesadaPorPeso();
+			}
+		});
+		panel.add(botonMostrarClique);
 		
+		JButton botonMostrarGrafoOriginal = new JButton("Grafo original");
+		botonMostrarGrafoOriginal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.dibujarGrafoOriginal();
+			}
+		});
+		panel.add(botonMostrarGrafoOriginal );
+
 		JLabel lblDobleClicDerecho = new JLabel("Doble clic derecho para agregar vertice");
 		panel.add(lblDobleClicDerecho);
 		frame.getContentPane().add(mapPanel, BorderLayout.CENTER);
@@ -125,7 +149,7 @@ public class Main {
 		mapPanel.add(mapViewer, BorderLayout.CENTER);
 		
 		crearFrameAgregarRelacion();
-		
+		frameParaElegirRelacion.setVisible(false);
 	}
 
 
@@ -157,7 +181,7 @@ public class Main {
 		valorPesoEntradaUser = new JTextField();
 		panel.add(valorPesoEntradaUser);
 		valorPesoEntradaUser.setColumns(10);
-
+		
 		JButton cargarRelacion = new JButton("Cargar relación");
 		panel.add(cargarRelacion);
 		cargarRelacion.addActionListener(new ActionListener() {
@@ -166,14 +190,13 @@ public class Main {
 			}
 		});
 		frameParaElegirRelacion.setBounds(100,100,550,200);
-		frameParaElegirRelacion.add(panel);
+		frameParaElegirRelacion.getContentPane().add(panel);
 		frameParaElegirRelacion.setVisible(true);
 		
 	}
 	
 	private void cargarNuevaArista() {
 
-		double peso = Double.valueOf(valorPesoEntradaUser.getText());
 		Vertice p1 = (Vertice) comboBox1.getSelectedItem();
 		Vertice p2 = (Vertice) comboBox2.getSelectedItem();
 		controlador.nuevaAristaEntreVertices(p1,p2);
@@ -188,5 +211,4 @@ public class Main {
 	public void mostrarAlerta(String mensaje) {
 		JOptionPane.showMessageDialog(null, mensaje);
 	}
-
 }

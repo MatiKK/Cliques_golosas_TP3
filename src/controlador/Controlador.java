@@ -50,10 +50,15 @@ public class Controlador {
 	}
 
 	public void nuevaAristaEntreVertices(Vertice v1, Vertice v2) {
-		grafo.agregarAristaEntreVertices(v1, v2);
-		dibujarLineaEntrePuntos(v1.getCordenada(), v2.getCordenada());
-		System.out.println("----------------------");
-		grafo.data();
+		try {
+			grafo.agregarAristaEntreVertices(v1, v2);
+			dibujarLineaEntrePuntos(v1.getCordenada(), v2.getCordenada());
+			System.out.println("----------------------");
+			grafo.data();
+		} catch (NullPointerException e) {
+			// puede pasar cuando no hay vertices o hay uno solo
+			mostrarAlerta("Vértice inválido");
+		}
 	}
 
 	
@@ -126,8 +131,7 @@ public class Controlador {
 	private void dibujarLineaEntrePuntos(Coordinate c1, Coordinate c2) {
 		map.addMapPolygon(new MapPolygonImpl(c1, c2, c1));
 	}
-	
-	
+
 	/**
 	 * agrego nueva arista al grafo
 	 * 
@@ -146,10 +150,10 @@ public class Controlador {
     			dibujarArista(ar);
     		} else {
     			// No enconté forma de poder hacerlo
-    			vista.mostrarAlerta("¡No puede cambiar el peso de la arista!");
+    			mostrarAlerta("¡No puede cambiar el peso de la arista!");
     		}
     	} catch (IllegalArgumentException e) {
-    		vista.mostrarAlerta("¡No puede añadir una relación entre un mismo vértice!");
+    		mostrarAlerta("¡No puede añadir una relación entre un mismo vértice!");
     	}
     }
     
