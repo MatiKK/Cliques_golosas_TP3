@@ -124,7 +124,7 @@ public class Main {
 
 		mapViewer.setZoom(5);
 		mapViewer.setTileSource(new org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource.Mapnik());
-		mapViewer.setDisplayPosition(new Coordinate(-40.6037, -65.3816), 4);		
+		mapViewer.setDisplayPosition(new Coordinate(-100,150), 6);
 		mapViewer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 2) {

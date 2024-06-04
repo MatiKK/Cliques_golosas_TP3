@@ -43,6 +43,13 @@ public class Controlador {
 	private static final Color colorVerticesClique = Color.RED;
 	private static final Color colorAristasClique = Color.RED;
 
+	private static Font fuenteDefault = MapMarkerDot.getDefaultStyle().getFont();
+
+	private static final Style estiloVerticeGrafo =
+			new Style(Color.BLACK, colorVerticesGrafo, null, fuenteDefault);
+
+	private static final Style estiloVerticeClique =
+			new Style(Color.BLACK, colorVerticesClique, null, fuenteDefault);
 
 	public Controlador(JMapViewer map) {
 		this.map = map;
@@ -56,7 +63,7 @@ public class Controlador {
 			cliqueEnPantalla = false;
 		}
 		grafo.agregarVertice(v);
-		dibujarVertice(v, colorVerticesGrafo);
+		dibujarVertice(v, estiloVerticeGrafo);
 		System.out.println("----------------------");
 		grafo.data();
 	}
@@ -78,7 +85,11 @@ public class Controlador {
 	}
 
 	public void dibujarGrafoOriginal() {
-		dibujarRedVertices(grafo, colorVerticesGrafo, colorAristasGrafo);
+		if (cliqueEnPantalla) {
+			limpiarMapa();
+			dibujarRedVertices(grafo, estiloVerticeGrafo, colorAristasGrafo);
+			cliqueEnPantalla = false;
+		}
 	}
 
 	public void dibujarCliqueMasPesadaPorPeso() {
@@ -97,6 +108,7 @@ public class Controlador {
 
 	public void dibujarCliqueMasPesadaPorCantidadVecinos() {
 		try {
+			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorCantidadVecinos();
 			if (cliqueEnPantalla) {
 				// para que no esten ambas pintadas al mismo tiempo
 				dibujarGrafoOriginal();
@@ -118,30 +130,32 @@ public class Controlador {
 	}
 
 	private void dibujarClique() {
-		dibujarRedVertices(cliqueMasPesada, colorVerticesClique, colorAristasClique);
+		dibujarRedVertices(cliqueMasPesada, estiloVerticeClique, colorAristasClique);
 	}
 
-	private void dibujarRedVertices(RedVertices g, Color colorVertices, Color colorAristas) {
+	private void dibujarRedVertices(RedVertices g, Style estiloVertice, Color colorAristas) {
 		for (Vertice v: g.vertices())
-			dibujarVertice(v, colorVertices);
+			dibujarVertice(v, estiloVertice);
 		Iterator<Arista> it = g.aristasIterator();
 		while (it.hasNext()) {
 			dibujarArista(it.next(), colorAristas);
 		}
 	}
 
-	private void dibujarVertice(Vertice v, Color color)
+	private void dibujarVertice(Vertice v, Style s)
 	{
 		Coordinate c;
 		String text;
-		
+		double pesoVertice;
+
 		c = v.getCordenada();
 		text = v.toString();
+		pesoVertice = v.obtenerPeso();
+
+		String textoPunto = text + " (" + pesoVertice + ")";
 		
 		// Crear un marcador para el vértice
-		MapMarkerDot marcador = new MapMarkerDot(text, c);
-		marcador.setColor(color);
-		
+		MapMarkerDot marcador = new MapMarkerDot(null, textoPunto, c, s);
 		// Agregar el marcador al JMapViewer
 		map.addMapMarker(marcador);
 	}
