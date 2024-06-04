@@ -84,7 +84,18 @@ public class Main {
 		JButton botonMostrarClique = new JButton("Clique más pesada");
 		botonMostrarClique.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controlador.dibujarCliqueMasPesadaPorPeso();
+									//eleccion1       //eleccion2
+				String[] opciones = {"Por peso", "Por cantidad de vecinos"};
+				int eleccion = JOptionPane.showOptionDialog(null,
+						"Elige el método de búsqueda", "Clique más pesada",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, null);
+				if (eleccion == 0) {//eleccion1
+					controlador.dibujarCliqueMasPesadaPorPeso();
+				} else if (eleccion == 1) {
+					controlador.dibujarCliqueMasPesadaPorCantidadVecinos();
+				} else {
+					// se cerró sin elegir opción
+				}
 			}
 		});
 		panel.add(botonMostrarClique);

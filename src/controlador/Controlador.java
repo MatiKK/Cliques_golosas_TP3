@@ -84,6 +84,10 @@ public class Controlador {
 	public void dibujarCliqueMasPesadaPorPeso() {
 		try {
 			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorPeso();
+			if (cliqueEnPantalla) {
+				// para que no esten ambas pintadas al mismo tiempo
+				dibujarGrafoOriginal();
+			}
 			cliqueEnPantalla = true;
 			dibujarClique();
 		} catch (IllegalArgumentException e) {
@@ -93,7 +97,10 @@ public class Controlador {
 
 	public void dibujarCliqueMasPesadaPorCantidadVecinos() {
 		try {
-			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorPeso();
+			if (cliqueEnPantalla) {
+				// para que no esten ambas pintadas al mismo tiempo
+				dibujarGrafoOriginal();
+			}
 			cliqueEnPantalla = true;
 			dibujarClique();
 		} catch (IllegalArgumentException e) {
