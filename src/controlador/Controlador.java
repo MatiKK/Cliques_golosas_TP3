@@ -68,6 +68,10 @@ public class Controlador {
 		grafo.data();
 	}
 
+	public int cantidadVerticesGrafo() {
+		return grafo.cantidadVertices();
+	}
+
 	public void nuevaAristaEntreVertices(Vertice v1, Vertice v2) {
 		try {
 			grafo.agregarAristaEntreVertices(v1, v2);

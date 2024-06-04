@@ -76,6 +76,10 @@ public class Main {
 		JButton botonAgregarArista = new JButton("Agregar relación");
 		botonAgregarArista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (controlador.cantidadVerticesGrafo() < 2) {
+					controlador.mostrarAlerta("Insuficientes vértices para agregar una arista");
+					return;
+				}
 				frameParaElegirRelacion.setVisible(true);
 			}
 		});
@@ -84,16 +88,30 @@ public class Main {
 		JButton botonMostrarClique = new JButton("Clique más pesada");
 		botonMostrarClique.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-									//eleccion1       //eleccion2
+
+				if (controlador.cantidadVerticesGrafo() == 0) {
+					controlador.mostrarAlerta("Insuficientes vértices para hallar la clique más pesada");
+					return;
+				}
+
 				String[] opciones = {"Por peso", "Por cantidad de vecinos"};
+
 				int eleccion = JOptionPane.showOptionDialog(null,
-						"Elige el método de búsqueda", "Clique más pesada",
-						JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, null);
+						"Elige el método de búsqueda",
+						"Clique más pesada",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						opciones,
+						null);
+
 				if (eleccion == 0) {//eleccion1
 					controlador.dibujarCliqueMasPesadaPorPeso();
-				} else if (eleccion == 1) {
+				}
+				else if (eleccion == 1) {
 					controlador.dibujarCliqueMasPesadaPorCantidadVecinos();
-				} else {
+				}
+				else {
 					// se cerró sin elegir opción
 				}
 			}
@@ -120,11 +138,10 @@ public class Main {
 				actualizarComboBox2();
 			}
 		});
-		
 
 		mapViewer.setZoom(5);
 		mapViewer.setTileSource(new org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource.Mapnik());
-		mapViewer.setDisplayPosition(new Coordinate(-100,150), 6);
+		mapViewer.setDisplayPosition(new Coordinate(-50,0), 6);
 		mapViewer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 2) {
