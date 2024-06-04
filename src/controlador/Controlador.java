@@ -135,6 +135,10 @@ public class Controlador {
 
 	private void dibujarClique() {
 		dibujarRedVertices(cliqueMasPesada, estiloVerticeClique, colorAristasClique);
+
+		String msj = "Clique más pesada: " + cliqueMasPesada.vertices();
+		msj = msj.concat("\nPeso: " + cliqueMasPesada.peso());
+		mostrarAlerta(msj);
 	}
 
 	private void dibujarRedVertices(RedVertices g, Style estiloVertice, Color colorAristas) {
