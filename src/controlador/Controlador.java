@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
+import javax.swing.JToolTip;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
@@ -34,7 +35,14 @@ public class Controlador {
 	
 	private Set<Arista> aristasG;
 	private Main vista;
-	
+
+	private boolean cliqueEnPantalla = false;
+
+	private static final Color colorVerticesGrafo = Color.YELLOW;
+	private static final Color colorAristasGrafo = Color.BLACK;
+	private static final Color colorVerticesClique = Color.RED;
+	private static final Color colorAristasClique = Color.RED;
+
 
 	public Controlador(JMapViewer map) {
 		this.map = map;
@@ -43,8 +51,12 @@ public class Controlador {
 	}
 
 	public void nuevoVertice(Vertice v) {
+		if (cliqueEnPantalla) {
+			dibujarGrafoOriginal();
+			cliqueEnPantalla = false;
+		}
 		grafo.agregarVertice(v);
-		dibujarVertice(v);
+		dibujarVertice(v, colorVerticesGrafo);
 		System.out.println("----------------------");
 		grafo.data();
 	}
@@ -52,7 +64,11 @@ public class Controlador {
 	public void nuevaAristaEntreVertices(Vertice v1, Vertice v2) {
 		try {
 			grafo.agregarAristaEntreVertices(v1, v2);
-			dibujarLineaEntrePuntos(v1.getCordenada(), v2.getCordenada());
+			if (cliqueEnPantalla) {
+				dibujarGrafoOriginal();
+				cliqueEnPantalla = false;
+			}
+			dibujarLineaEntrePuntos(v1.getCordenada(), v2.getCordenada(), colorAristasGrafo);
 			System.out.println("----------------------");
 			grafo.data();
 		} catch (NullPointerException e) {
@@ -61,16 +77,15 @@ public class Controlador {
 		}
 	}
 
-	
-
 	public void dibujarGrafoOriginal() {
-		dibujarRedVertices(grafo);
+		dibujarRedVertices(grafo, colorVerticesGrafo, colorAristasGrafo);
 	}
 
 	public void dibujarCliqueMasPesadaPorPeso() {
 		try {
 			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorPeso();
-			dibujarRedVertices(cliqueMasPesada);
+			cliqueEnPantalla = true;
+			dibujarClique();
 		} catch (IllegalArgumentException e) {
 			mostrarAlerta("El grafo aún no tiene vértices");
 		}
@@ -78,8 +93,9 @@ public class Controlador {
 
 	public void dibujarCliqueMasPesadaPorCantidadVecinos() {
 		try {
-			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorCantidadVecinos();
-			dibujarRedVertices(cliqueMasPesada);
+			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorPeso();
+			cliqueEnPantalla = true;
+			dibujarClique();
 		} catch (IllegalArgumentException e) {
 			mostrarAlerta("El grafo aún no tiene vértices");
 		}
@@ -94,17 +110,20 @@ public class Controlador {
 		map.removeAllMapMarkers();
 	}
 
-	private void dibujarRedVertices(RedVertices g) {
-		limpiarMapa();
+	private void dibujarClique() {
+		dibujarRedVertices(cliqueMasPesada, colorVerticesClique, colorAristasClique);
+	}
+
+	private void dibujarRedVertices(RedVertices g, Color colorVertices, Color colorAristas) {
 		for (Vertice v: g.vertices())
-			dibujarVertice(v);
+			dibujarVertice(v, colorVertices);
 		Iterator<Arista> it = g.aristasIterator();
 		while (it.hasNext()) {
-			dibujarArista(it.next());
+			dibujarArista(it.next(), colorAristas);
 		}
 	}
 
-	private void dibujarVertice(Vertice v)
+	private void dibujarVertice(Vertice v, Color color)
 	{
 		Coordinate c;
 		String text;
@@ -114,22 +133,24 @@ public class Controlador {
 		
 		// Crear un marcador para el vértice
 		MapMarkerDot marcador = new MapMarkerDot(text, c);
-		//marcador.setColor(Color.YELLOW);
+		marcador.setColor(color);
 		
 		// Agregar el marcador al JMapViewer
 		map.addMapMarker(marcador);
 	}
 	
-	private void dibujarArista(Arista arista) {
+	private void dibujarArista(Arista arista, Color color) {
 		Vertice v1 = arista.verticeInicio();
 		Vertice v2 = arista.verticeDestino();
 		Coordinate c1 = v1.getCordenada();
 		Coordinate c2 = v2.getCordenada();
-		dibujarLineaEntrePuntos(c1,c2);
+		dibujarLineaEntrePuntos(c1,c2, color);
 	}
 
-	private void dibujarLineaEntrePuntos(Coordinate c1, Coordinate c2) {
-		map.addMapPolygon(new MapPolygonImpl(c1, c2, c1));
+	private void dibujarLineaEntrePuntos(Coordinate c1, Coordinate c2, Color color) {
+		MapPolygonImpl linea = new MapPolygonImpl(c1,c2,c1);
+		linea.setColor(color);
+		map.addMapPolygon(linea);
 	}
 
 	/**
@@ -147,7 +168,7 @@ public class Controlador {
     		Arista ar = new Arista(p1,p2,peso);
     		if (agregarArista(ar)) {
     			//graficarArista(vista.getMapViewer(), ar);
-    			dibujarArista(ar);
+    			dibujarArista(ar, colorAristasGrafo);
     		} else {
     			// No enconté forma de poder hacerlo
     			mostrarAlerta("¡No puede cambiar el peso de la arista!");
