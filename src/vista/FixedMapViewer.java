@@ -47,6 +47,5 @@ public class FixedMapViewer extends JMapViewer {
 	public void zoomOut() {}
 	public void setZoom(int zoom) {}
 	public void setZoom(int zoom, java.awt.Point mapPoint) {}
-	public void setDisplayPosition(org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate mapPoint, int zoom) {}
 	public void moveMap(int x, int y) {}
 }
