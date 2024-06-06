@@ -7,10 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -26,10 +28,13 @@ public class Main {
 
 	private JFrame frame;
 	private JMapViewer mapViewer;
-	private Controlador control;
+	private Controlador controlador;
 	private JComboBox<Vertice> comboBox1;
 	private JComboBox<Vertice> comboBox2;
-
+	
+	private JFrame frameParaElegirRelacion;
+	private JTextField valorPesoEntradaUser;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -51,7 +56,7 @@ public class Main {
 	 */
 	public Main() {
 		mapViewer = new JMapViewer();
-		control = new Controlador(this.mapViewer);
+		controlador = new Controlador(this.mapViewer);
 		initialize();
 	}
 
@@ -67,7 +72,60 @@ public class Main {
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
+
+		JButton botonAgregarArista = new JButton("Agregar relación");
+		botonAgregarArista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (controlador.cantidadVerticesGrafo() < 2) {
+					controlador.mostrarAlerta("Insuficientes vértices para agregar una arista");
+					return;
+				}
+				frameParaElegirRelacion.setVisible(true);
+			}
+		});
+		panel.add(botonAgregarArista);
+
+		JButton botonMostrarClique = new JButton("Clique más pesada");
+		botonMostrarClique.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (controlador.cantidadVerticesGrafo() == 0) {
+					controlador.mostrarAlerta("Insuficientes vértices para hallar la clique más pesada");
+					return;
+				}
+
+				String[] opciones = {"Por peso", "Por cantidad de vecinos"};
+
+				int eleccion = JOptionPane.showOptionDialog(null,
+						"Elige el método de búsqueda",
+						"Clique más pesada",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						opciones,
+						null);
+
+				if (eleccion == 0) {//eleccion1
+					controlador.dibujarCliqueMasPesadaPorPeso();
+				}
+				else if (eleccion == 1) {
+					controlador.dibujarCliqueMasPesadaPorCantidadVecinos();
+				}
+				else {
+					// se cerró sin elegir opción
+				}
+			}
+		});
+		panel.add(botonMostrarClique);
 		
+		JButton botonMostrarGrafoOriginal = new JButton("Grafo original");
+		botonMostrarGrafoOriginal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.dibujarGrafoOriginal();
+			}
+		});
+		panel.add(botonMostrarGrafoOriginal );
+
 		JLabel lblDobleClicDerecho = new JLabel("Doble clic derecho para agregar vertice");
 		panel.add(lblDobleClicDerecho);
 		frame.getContentPane().add(mapPanel, BorderLayout.CENTER);
@@ -83,7 +141,7 @@ public class Main {
 
 		mapViewer.setZoom(5);
 		mapViewer.setTileSource(new org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource.Mapnik());
-		mapViewer.setDisplayPosition(new Coordinate(-40.6037, -65.3816), 4);		
+		mapViewer.setDisplayPosition(new Coordinate(-50,0), 6);
 		mapViewer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 2) {
@@ -93,7 +151,7 @@ public class Main {
 
 					nombreVertice = JOptionPane.showInputDialog("Nombre para el vertice");
 					if (nombreVertice == null || nombreVertice.isEmpty() || nombreVertice.isBlank()) {
-						control.mostrarAlerta("Nombre inválido");
+						controlador.mostrarAlerta("Nombre inválido");
 						return;
 					}
 
@@ -102,14 +160,14 @@ public class Main {
 								JOptionPane.showInputDialog("Peso para el vertice " + nombreVertice)
 								);
 					} catch(NumberFormatException ex) {
-						control.mostrarAlerta("Número inválido");
+						controlador.mostrarAlerta("Número inválido");
 						return;
 					}
 
 					Point punto = e.getPoint();
 					Coordinate c = (Coordinate) mapViewer.getPosition(punto);
 					Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c); 
-					control.nuevoVertice(verticeNuevo);
+					controlador.nuevoVertice(verticeNuevo);
 					comboBox1.addItem(verticeNuevo);
 					actualizarComboBox2();
 				}
@@ -118,7 +176,10 @@ public class Main {
 		
 		mapPanel.add(mapViewer, BorderLayout.CENTER);
 		
+		crearFrameAgregarRelacion();
+		frameParaElegirRelacion.setVisible(false);
 	}
+
 
 	private void actualizarComboBox2() {
 		comboBox2.removeAllItems();
@@ -137,5 +198,45 @@ public class Main {
 	 * y salgan los dos comboboxes de los vértices
 	 * y el usuario elige 2 para unir
 	 */
+	
+	private void crearFrameAgregarRelacion() {
+		frameParaElegirRelacion = new JFrame();
+		JPanel panel = new JPanel();
+		panel.add(comboBox1);
+		panel.add(comboBox2);
+		JLabel lblNewLabel_2 = new JLabel("       Indique peso:");
+		panel.add(lblNewLabel_2);
+		valorPesoEntradaUser = new JTextField();
+		panel.add(valorPesoEntradaUser);
+		valorPesoEntradaUser.setColumns(10);
+		
+		JButton cargarRelacion = new JButton("Cargar relación");
+		panel.add(cargarRelacion);
+		cargarRelacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cargarNuevaArista();				
+			}
+		});
+		frameParaElegirRelacion.setBounds(100,100,550,200);
+		frameParaElegirRelacion.getContentPane().add(panel);
+		frameParaElegirRelacion.setVisible(true);
+		
+	}
+	
+	private void cargarNuevaArista() {
 
+		Vertice p1 = (Vertice) comboBox1.getSelectedItem();
+		Vertice p2 = (Vertice) comboBox2.getSelectedItem();
+		controlador.nuevaAristaEntreVertices(p1,p2);
+		//controlador.nuevaArista(p1, p2, peso);
+
+	}
+	
+	public JMapViewer getMapViewer() {
+		return mapViewer;
+	}
+	
+	public void mostrarAlerta(String mensaje) {
+		JOptionPane.showMessageDialog(null, mensaje);
+	}
 }
