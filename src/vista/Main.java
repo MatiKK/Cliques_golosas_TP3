@@ -27,11 +27,10 @@ import javax.swing.JLabel;
 public class Main {
 
 	private JFrame frame;
-	private JMapViewer mapViewer;
+	private FixedMapViewer mapViewer;
 	private Controlador controlador;
 	private JComboBox<Vertice> comboBox1;
 	private JComboBox<Vertice> comboBox2;
-	
 	private JFrame frameParaElegirRelacion;
 	private JTextField valorPesoEntradaUser;
 	
@@ -55,7 +54,8 @@ public class Main {
 	 * Create the application.
 	 */
 	public Main() {
-		mapViewer = new JMapViewer();
+//		mapViewer = FixedMapViewer.fijadoEnMar();
+		mapViewer = FixedMapViewer.fijadoEnPantallaBlanco();
 		controlador = new Controlador(this.mapViewer);
 		initialize();
 	}
@@ -139,9 +139,6 @@ public class Main {
 			}
 		});
 
-		mapViewer.setZoom(5);
-		mapViewer.setTileSource(new org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource.Mapnik());
-		mapViewer.setDisplayPosition(new Coordinate(-50,0), 6);
 		mapViewer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 2) {
@@ -166,7 +163,7 @@ public class Main {
 
 					Point punto = e.getPoint();
 					Coordinate c = (Coordinate) mapViewer.getPosition(punto);
-					Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c); 
+					Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c);
 					controlador.nuevoVertice(verticeNuevo);
 					comboBox1.addItem(verticeNuevo);
 					actualizarComboBox2();
