@@ -9,10 +9,10 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
 @SuppressWarnings("serial")
 public class FixedMapViewer extends JMapViewer {
 
-	private final static Coordinate
-				coords_mar = new Coordinate(-50,0);
-	private final static Coordinate
-				coords_pantalla_en_blanco = new Coordinate(-200,-200);
+	private final static Coordinate	coords_mar = new Coordinate(-50,-130);
+	private final static zoom_mar = 6;
+	private final static Coordinate coords_pantalla_en_blanco = new Coordinate(-80,-40);
+	private final static zoom_pantalla_blanco = 4;
 
 	public FixedMapViewer() {
 		super();
@@ -24,7 +24,7 @@ public class FixedMapViewer extends JMapViewer {
 	 * @return
 	 */
 	public static FixedMapViewer fijadoEnMar() {
-		return fijadoEnCoords(coords_mar);
+		return fijadoEnCoords(coords_mar, zoom_mar);
 	}
 
 	/**
@@ -32,14 +32,14 @@ public class FixedMapViewer extends JMapViewer {
 	 * @return
 	 */
 	public static FixedMapViewer fijadoEnPantallaBlanco() {
-		return fijadoEnCoords(coords_pantalla_en_blanco);
+		return fijadoEnCoords(coords_pantalla_en_blanco, zoom_pantalla_blanco);
 	}
 
-	private static FixedMapViewer fijadoEnCoords(Coordinate c) {
+	private static FixedMapViewer fijadoEnCoords(Coordinate c, int zoom) {
 		FixedMapViewer map = new FixedMapViewer();
 		map.setZoom(5);
 		map.setTileSource(new org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource.Mapnik());
-		map.setDisplayPosition(c, 6);
+		map.setDisplayPosition(c, zoom);
 		return map;
 	}
 
