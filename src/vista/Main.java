@@ -7,20 +7,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-
 import org.openstreetmap.gui.jmapviewer.Coordinate;
-import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
 import controlador.Controlador;
 import logicaGrafo.Vertice;
-
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 
@@ -32,8 +29,7 @@ public class Main {
 	private JComboBox<Vertice> comboBox1;
 	private JComboBox<Vertice> comboBox2;
 	private JFrame frameParaElegirRelacion;
-	private JTextField valorPesoEntradaUser;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -54,8 +50,8 @@ public class Main {
 	 * Create the application.
 	 */
 	public Main() {
-//		mapViewer = FixedMapViewer.fijadoEnMar();
-		mapViewer = FixedMapViewer.fijadoEnPantallaBlanco();
+		mapViewer = FixedMapViewer.fijadoEnMar();
+//		mapViewer = FixedMapViewer.fijadoEnPantallaBlanco();
 		controlador = new Controlador(this.mapViewer);
 		initialize();
 	}
@@ -65,7 +61,13 @@ public class Main {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 600);
+		int anchoFrame = 1000;
+		int altoFrame = 600;
+		frame.setBounds(
+				(PantallaUtils.anchoPantalla - anchoFrame)/2,
+				(PantallaUtils.altoPantalla - altoFrame)/2,
+				anchoFrame,
+				altoFrame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel mapPanel = new JPanel(new BorderLayout());
@@ -95,6 +97,8 @@ public class Main {
 				}
 
 				String[] opciones = {"Por peso", "Por cantidad de vecinos"};
+				final int porPeso = 0;
+				final int porCantidadVecinos = 1;
 
 				int eleccion = JOptionPane.showOptionDialog(null,
 						"Elige el método de búsqueda",
@@ -105,14 +109,14 @@ public class Main {
 						opciones,
 						null);
 
-				if (eleccion == 0) {//eleccion1
+				if (eleccion == porPeso) {
 					controlador.dibujarCliqueMasPesadaPorPeso();
 				}
-				else if (eleccion == 1) {
+				else if (eleccion == porCantidadVecinos) {
 					controlador.dibujarCliqueMasPesadaPorCantidadVecinos();
 				}
 				else {
-					// se cerró sin elegir opción
+					return;
 				}
 			}
 		});
@@ -143,30 +147,34 @@ public class Main {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 2) {
 
-					String nombreVertice;
-					double pesoVertice;
+					String nombreVertice = JOptionPane.showInputDialog("Nombre para el vertice");
 
-					nombreVertice = JOptionPane.showInputDialog("Nombre para el vertice");
-					if (nombreVertice == null || nombreVertice.isEmpty() || nombreVertice.isBlank()) {
+					if (nombreVertice == null)
+						return;
+
+					if (nombreVertice.isEmpty() || nombreVertice.isBlank()) {
 						controlador.mostrarAlerta("Nombre inválido");
 						return;
 					}
 
 					try {
-						pesoVertice = Double.parseDouble(
-								JOptionPane.showInputDialog("Peso para el vertice " + nombreVertice)
-								);
-					} catch(NumberFormatException ex) {
+						double pesoVertice =
+							Double.parseDouble(
+							JOptionPane.showInputDialog(
+							"Peso para el vertice " + nombreVertice)
+						);
+						Point punto = e.getPoint();
+						Coordinate c = (Coordinate) mapViewer.getPosition(punto);
+						Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c);
+						controlador.nuevoVertice(verticeNuevo);
+						comboBox1.addItem(verticeNuevo);
+						actualizarComboBox2();
+					}
+					catch(NumberFormatException ex) {
 						controlador.mostrarAlerta("Número inválido");
 						return;
 					}
 
-					Point punto = e.getPoint();
-					Coordinate c = (Coordinate) mapViewer.getPosition(punto);
-					Vertice verticeNuevo = new Vertice(nombreVertice,pesoVertice,c);
-					controlador.nuevoVertice(verticeNuevo);
-					comboBox1.addItem(verticeNuevo);
-					actualizarComboBox2();
 				}
 			}
 		});		
@@ -188,52 +196,56 @@ public class Main {
 		}
 	}
 
-	//TODO
-	/**
-	 * Agregar un boton para agregar arista
-	 * donde salga una pantallita
-	 * y salgan los dos comboboxes de los vértices
-	 * y el usuario elige 2 para unir
-	 */
-	
 	private void crearFrameAgregarRelacion() {
-		frameParaElegirRelacion = new JFrame();
+
+		frameParaElegirRelacion = new JFrame("Agregar nueva arista");
 		JPanel panel = new JPanel();
-		panel.add(comboBox1);
-		panel.add(comboBox2);
-		JLabel lblNewLabel_2 = new JLabel("       Indique peso:");
-		panel.add(lblNewLabel_2);
-		valorPesoEntradaUser = new JTextField();
-		panel.add(valorPesoEntradaUser);
-		valorPesoEntradaUser.setColumns(10);
-		
 		JButton cargarRelacion = new JButton("Cargar relación");
-		panel.add(cargarRelacion);
 		cargarRelacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cargarNuevaArista();				
+				cargarNuevaArista();
 			}
 		});
-		frameParaElegirRelacion.setBounds(100,100,550,200);
+		int ancho = 400;
+		int alto = 120;
+		frameParaElegirRelacion.setBounds(
+				frame.getX(),
+				frame.getY(),
+				ancho,
+				alto);
 		frameParaElegirRelacion.getContentPane().add(panel);
 		frameParaElegirRelacion.setVisible(true);
-		
-	}
-	
-	private void cargarNuevaArista() {
 
+		/*
+		 * para que se mueste de la siguiente forma
+		 * [combobox1] [boton]
+		 * [bombobox2]
+		 */
+		GroupLayout layout = new GroupLayout(panel);
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+		layout.setHorizontalGroup(
+			layout.createSequentialGroup().
+			addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addComponent(comboBox1)
+			.addComponent(comboBox2)
+			).addComponent(cargarRelacion)
+		);
+		layout.setVerticalGroup(
+			layout.createSequentialGroup().
+			addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			.addComponent(comboBox1)
+			.addComponent(cargarRelacion)
+			).addComponent(comboBox2)
+		);
+
+		panel.setLayout(layout);
+	}
+
+	private void cargarNuevaArista() {
 		Vertice p1 = (Vertice) comboBox1.getSelectedItem();
 		Vertice p2 = (Vertice) comboBox2.getSelectedItem();
 		controlador.nuevaAristaEntreVertices(p1,p2);
-		//controlador.nuevaArista(p1, p2, peso);
+	}
 
-	}
-	
-	public JMapViewer getMapViewer() {
-		return mapViewer;
-	}
-	
-	public void mostrarAlerta(String mensaje) {
-		JOptionPane.showMessageDialog(null, mensaje);
-	}
 }
