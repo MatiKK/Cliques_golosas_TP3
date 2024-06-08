@@ -10,9 +10,9 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
 public class FixedMapViewer extends JMapViewer {
 
 	private final static Coordinate	coords_mar = new Coordinate(-50,-130);
-	private final static zoom_mar = 6;
+	private final static int zoom_mar = 6;
 	private final static Coordinate coords_pantalla_en_blanco = new Coordinate(-80,-40);
-	private final static zoom_pantalla_blanco = 4;
+	private final static int zoom_pantalla_blanco = 4;
 
 	public FixedMapViewer() {
 		super();
