@@ -30,20 +30,6 @@ public class Grafo extends RedVertices {
 	}
 
 	/**
-	 * Agrega todos los vértices a este grafo
-	 * 
-	 * @param vertices vértices nuevos para agregar
-	 */
-	public void agregarVertices(Vertice... vertices) {
-		if (cantidadVertices() == 0) {
-			for (Vertice v : vertices)
-				agregarVerticeSinChequear(v);
-		} else {
-			super.agregarVertices(vertices);
-		}
-	}
-	
-	/**
 	 * Agrega el vértice a este grafo
 	 * 
 	 * @param v nuevo vértice para agregar
@@ -58,7 +44,6 @@ public class Grafo extends RedVertices {
 		listaVecinos.put(v, new TreeSet<Vertice>());
 	}
 
-	@Override
 	public void agregarAristaEntreVertices(Vertice v1, Vertice v2) {
 		verificarQueElVerticeExiste(v1);
 		verificarQueElVerticeExiste(v2);

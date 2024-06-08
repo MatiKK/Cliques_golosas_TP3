@@ -4,19 +4,8 @@ public abstract class RedVertices {
 
 	public abstract int cantidadVertices();
 
-	public abstract void agregarAristaEntreVertices(Vertice v1, Vertice v2);
-
-	public abstract void quitarAristaEntreVertices(Vertice v1, Vertice v2);
-
-	public abstract void agregarVertice(Vertice v);
-
-	public void agregarVertices(Vertice... vertices) {
-		for (Vertice v: vertices)
-			agregarVertice(v);
-	}
-
 	/**
-	 * Usar solo para muestras en consola
+	 * Usar solo para testeos por consola
 	 */
 	public abstract void data();
 

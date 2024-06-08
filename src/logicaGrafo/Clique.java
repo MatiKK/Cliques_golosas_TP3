@@ -90,11 +90,13 @@ public class Clique extends RedVertices {
 	public void data() {
 		System.out.println("Clique de peso " + peso());
 		System.out.println("Vertices: " + vertices());
-		System.out.println("Aristas:");
-		Iterator<Arista> aristas = aristasIterator();
-		while (aristas.hasNext()) {
-			System.out.println(aristas.next());
-		}
+		for (Vertice v : vertices()) {
+			System.out.print("Vecinos de " + v + "(peso " + v.obtenerPeso() + "): ");
+			@SuppressWarnings("unchecked")
+			ArrayList<Vertice> ver = (ArrayList<Vertice>)vertices.clone();
+			ver.remove(v);
+			System.out.println(ver);
+		}			
 	}
 
 }

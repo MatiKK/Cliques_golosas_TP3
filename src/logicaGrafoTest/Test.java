@@ -1,24 +1,31 @@
 package logicaGrafoTest;
 
-import java.util.Iterator;
-
 import logicaGrafo.*;
 
 public class Test {
 
 	public static void main(String[] args) {
 
-		Grafo g = EjemploGrafos.grafo1();
+		Grafo g;
+		Clique clique;
+
+//		g = EjemploGrafos.grafoNull();
+		g = EjemploGrafos.GrafoSoloUnaArista();
+//		g = EjemploGrafos.GrafoSoloUnVertice();
+//		g = EjemploGrafos.grafoSinVertices();
+//		g = EjemploGrafos.GrafoSinAristas();
+//		g = EjemploGrafos.grafo1();
+//		g = EjemploGrafos.grafo2();
+//		g = EjemploGrafos.grafo3();
+//		g = EjemploGrafos.grafoCompletoK3();
+//		g = EjemploGrafos.grafoCompletoK4();
+//		g = EjemploGrafos.grafoCompletoK5();
 		g.data();
-		System.out.println("Aristas:");
-		Iterator<Arista> aristasdeg = g.aristasIterator();
-		while (aristasdeg.hasNext()) System.out.println(aristasdeg.next());
 
 		System.out.println("\nClique más pesada:");
 		System.out.println("---------------------------------------");
 		System.out.println("Ordenando por peso\n");
 
-		Clique clique;
 		clique = g.cliqueMasPesadaOrdenandoPorPeso();
 		clique.data();
 
