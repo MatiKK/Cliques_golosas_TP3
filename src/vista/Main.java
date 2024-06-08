@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -59,7 +61,13 @@ public class Main {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 600);
+		int anchoFrame = 1000;
+		int altoFrame = 600;
+		frame.setBounds(
+				(PantallaUtils.anchoPantalla - anchoFrame)/2,
+				(PantallaUtils.altoPantalla - altoFrame)/2,
+				anchoFrame,
+				altoFrame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel mapPanel = new JPanel(new BorderLayout());
@@ -122,7 +130,7 @@ public class Main {
 		});
 		panel.add(botonMostrarGrafoOriginal );
 
-		JLabel lblDobleClicDerecho = new JLabel("Doble clic izquierdo para agregar vertice");
+		JLabel lblDobleClicDerecho = new JLabel("Doble clic derecho para agregar vertice");
 		panel.add(lblDobleClicDerecho);
 		frame.getContentPane().add(mapPanel, BorderLayout.CENTER);
 
@@ -137,7 +145,7 @@ public class Main {
 
 		mapViewer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+				if (SwingUtilities.isRightMouseButton(e) && e.getClickCount() == 2) {
 
 					String nombreVertice = JOptionPane.showInputDialog("Nombre para el vertice");
 
@@ -189,20 +197,49 @@ public class Main {
 	}
 
 	private void crearFrameAgregarRelacion() {
-		frameParaElegirRelacion = new JFrame();
+
+		frameParaElegirRelacion = new JFrame("Agregar nueva arista");
 		JPanel panel = new JPanel();
-		panel.add(comboBox1);
-		panel.add(comboBox2);
 		JButton cargarRelacion = new JButton("Cargar relación");
-		panel.add(cargarRelacion);
 		cargarRelacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cargarNuevaArista();				
+				cargarNuevaArista();
 			}
 		});
-		frameParaElegirRelacion.setBounds(100,100,550,200);
+		int ancho = 400;
+		int alto = 120;
+		frameParaElegirRelacion.setBounds(
+				frame.getX(),
+				frame.getY(),
+				ancho,
+				alto);
 		frameParaElegirRelacion.getContentPane().add(panel);
 		frameParaElegirRelacion.setVisible(true);
+
+		/*
+		 * para que se mueste de la siguiente forma
+		 * [combobox1] [boton]
+		 * [bombobox2]
+		 */
+		GroupLayout layout = new GroupLayout(panel);
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+		layout.setHorizontalGroup(
+			layout.createSequentialGroup().
+			addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			.addComponent(comboBox1)
+			.addComponent(comboBox2)
+			).addComponent(cargarRelacion)
+		);
+		layout.setVerticalGroup(
+			layout.createSequentialGroup().
+			addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			.addComponent(comboBox1)
+			.addComponent(cargarRelacion)
+			).addComponent(comboBox2)
+		);
+
+		panel.setLayout(layout);
 	}
 
 	private void cargarNuevaArista() {
