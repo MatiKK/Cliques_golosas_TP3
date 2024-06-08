@@ -32,9 +32,6 @@ public class Controlador {
 	private Grafo grafo;
 	private Clique cliqueMasPesada;
 	private JMapViewer map;
-	
-	private Set<Arista> aristasG;
-	private Main vista;
 
 	private boolean cliqueEnPantalla = false;
 
@@ -42,7 +39,6 @@ public class Controlador {
 	private static final Color colorAristasGrafo = Color.BLACK;
 	private static final Color colorVerticesClique = Color.RED;
 	private static final Color colorAristasClique = Color.RED;
-
 	private static Font fuenteDefault = MapMarkerDot.getDefaultStyle().getFont();
 
 	private static final Style estiloVerticeGrafo =
@@ -64,7 +60,6 @@ public class Controlador {
 		}
 		grafo.agregarVertice(v);
 		dibujarVertice(v, estiloVerticeGrafo);
-		System.out.println("----------------------");
 		grafo.data();
 	}
 
@@ -80,7 +75,6 @@ public class Controlador {
 				cliqueEnPantalla = false;
 			}
 			dibujarLineaEntrePuntos(v1.getCordenada(), v2.getCordenada(), colorAristasGrafo);
-			System.out.println("----------------------");
 			grafo.data();
 		} catch (NullPointerException e) {
 			// puede pasar cuando no hay vertices o hay uno solo
@@ -181,39 +175,5 @@ public class Controlador {
 		linea.setColor(color);
 		map.addMapPolygon(linea);
 	}
-
-	/**
-	 * agrego nueva arista al grafo
-	 * 
-	 * @param p1
-	 * @param p2
-	 * @param peso
-	 */
-    public void nuevaArista(Vertice p1, Vertice p2, double peso) {
-    	try {
-    		System.out.println("el valor de p1 es: " + p1);
-    		System.out.println("el valor de p2 es: " + p2);
-    		grafo.agregarAristaEntreVertices(p1, p2, peso);
-    		Arista ar = new Arista(p1,p2,peso);
-    		if (agregarArista(ar)) {
-    			//graficarArista(vista.getMapViewer(), ar);
-    			dibujarArista(ar, colorAristasGrafo);
-    		} else {
-    			// No enconté forma de poder hacerlo
-    			mostrarAlerta("¡No puede cambiar el peso de la arista!");
-    		}
-    	} catch (IllegalArgumentException e) {
-    		mostrarAlerta("¡No puede añadir una relación entre un mismo vértice!");
-    	}
-    }
-    
-    public boolean agregarArista(Arista ar) {
-    	return aristasG.add(ar);
-    }
-    
-    
-    
-	
-	
 
 }

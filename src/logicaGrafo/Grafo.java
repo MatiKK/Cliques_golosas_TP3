@@ -8,8 +8,6 @@ import java.util.NoSuchElementException;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import logicaGrafo.Arista;
-
 /**
  * Clase que representa un grafo, donde sus vértices poseen un peso (positivo).
  * Un grafo admite agregar vértices, agregar aristas entre vértices, y la
@@ -20,14 +18,11 @@ public class Grafo extends RedVertices {
 
 	private TreeMap<Vertice, TreeSet<Vertice>> listaVecinos;
 	
-	private TreeMap<Vertice, TreeSet<Arista>> adjList;
-
 	/**
 	 * Crea un grafo sin vértices iniciales
 	 */
 	public Grafo() {
 		listaVecinos = new TreeMap<>();
-		adjList = new TreeMap<>();
 	}
 
 	public int cantidadVertices() {
@@ -48,21 +43,6 @@ public class Grafo extends RedVertices {
 		}
 	}
 	
-	/**
-	 * agregar arista al grafo
-	 * 
-	 */
-	
-	public void agregarAristaEntreVertices(Vertice v1, Vertice v2, double p) {
-		//chequearValidezPosibleArista(v1,v2,p);
-		System.out.println("el valor del vertice 1 es: " + v1);
-		System.out.println("el valor del vertice 2 es: " + v2);
-		System.out.println("el valor del peso es: " + p);
-		
-		adjList.get(v1).add(new Arista(v1,v2,p));
-		adjList.get(v2).add(new Arista(v2,v1,p));
-	}
-
 	/**
 	 * Agrega el vértice a este grafo
 	 * 
