@@ -92,7 +92,12 @@ public class Controlador {
 
 	public void dibujarCliqueMasPesadaPorPeso() {
 		try {
+			long a, b;
+			a = System.nanoTime();
 			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorPeso();
+			b = System.nanoTime();
+			System.out.println("Clique más pesada ordenada por peso computada en:");
+			System.out.println(b-a + " nanosegundos, o " + (b-a)/1000000d +" milisegundos");
 			if (cliqueEnPantalla) {
 				// para que no esten ambas pintadas al mismo tiempo
 				dibujarGrafoOriginal();
@@ -106,7 +111,12 @@ public class Controlador {
 
 	public void dibujarCliqueMasPesadaPorCantidadVecinos() {
 		try {
+			long a,b;
+			a = System.nanoTime();
 			cliqueMasPesada = grafo.cliqueMasPesadaOrdenandoPorCantidadVecinos();
+			b = System.nanoTime();
+			System.out.println("Clique más pesada ordenada por cantidad de vecinos computada en:");
+			System.out.println(b-a + " nanosegundos, o " + (b-a)/1000000d +" milisegundos");
 			if (cliqueEnPantalla) {
 				// para que no esten ambas pintadas al mismo tiempo
 				dibujarGrafoOriginal();
