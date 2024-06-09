@@ -174,6 +174,9 @@ public class Main {
 						controlador.mostrarAlerta("Número inválido");
 						return;
 					}
+					catch (NullPointerException ex) {
+						return;
+					}
 
 				}
 			}
