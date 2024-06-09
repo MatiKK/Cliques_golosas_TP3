@@ -129,12 +129,14 @@ public class Grafo extends RedVertices {
 	}
 
 	public void data() {
+		System.out.println("---------------------------------------");
 		System.out.println("Grafo");
 		System.out.println("Vertices: " + vertices());
 		for (Vertice v : vertices()) {
 			System.out.print("Vecinos de " + v + "(peso " + v.obtenerPeso() + "): ");
 			System.out.println(listaVecinos.get(v));
 		}
+		System.out.println("---------------------------------------");
 	}
 
 	public Iterator<Arista> aristasIterator() {

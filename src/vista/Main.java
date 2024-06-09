@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -201,14 +202,23 @@ public class Main {
 
 	private void crearFrameAgregarRelacion() {
 
-		frameParaElegirRelacion = new JFrame("Agregar nueva arista");
+		frameParaElegirRelacion = new JFrame("Interacción aristas");
 		JPanel panel = new JPanel();
-		JButton cargarRelacion = new JButton("Cargar relación");
+
+		JButton cargarRelacion = new JButton("Cargar arista");
 		cargarRelacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cargarNuevaArista();
 			}
 		});
+
+		JButton quitarRelacion = new JButton("Quitar arista");
+		quitarRelacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				quitarArista();
+			}
+		});
+
 		int ancho = 400;
 		int alto = 120;
 		frameParaElegirRelacion.setBounds(
@@ -219,36 +229,26 @@ public class Main {
 		frameParaElegirRelacion.getContentPane().add(panel);
 		frameParaElegirRelacion.setVisible(true);
 
-		/*
-		 * para que se mueste de la siguiente forma
-		 * [combobox1] [boton]
-		 * [bombobox2]
-		 */
-		GroupLayout layout = new GroupLayout(panel);
-		layout.setAutoCreateGaps(true);
-		layout.setAutoCreateContainerGaps(true);
-		layout.setHorizontalGroup(
-			layout.createSequentialGroup().
-			addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			.addComponent(comboBox1)
-			.addComponent(comboBox2)
-			).addComponent(cargarRelacion)
-		);
-		layout.setVerticalGroup(
-			layout.createSequentialGroup().
-			addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			.addComponent(comboBox1)
-			.addComponent(cargarRelacion)
-			).addComponent(comboBox2)
-		);
+		int espacio = 15;
+		GridLayout gl = new GridLayout(2,2,espacio, espacio);
+		panel.setLayout(gl);
+		panel.add(comboBox1);
+		panel.add(cargarRelacion);
+		panel.add(comboBox2);
+		panel.add(quitarRelacion);
 
-		panel.setLayout(layout);
 	}
 
 	private void cargarNuevaArista() {
 		Vertice p1 = (Vertice) comboBox1.getSelectedItem();
 		Vertice p2 = (Vertice) comboBox2.getSelectedItem();
 		controlador.nuevaAristaEntreVertices(p1,p2);
+	}
+
+	private void quitarArista() {
+		Vertice p1 = (Vertice) comboBox1.getSelectedItem();
+		Vertice p2 = (Vertice) comboBox2.getSelectedItem();
+		controlador.quitarAristaEntreVertices(p1,p2);
 	}
 
 }

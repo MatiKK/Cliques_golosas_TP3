@@ -82,12 +82,23 @@ public class Controlador {
 		}
 	}
 
+	public void quitarAristaEntreVertices(Vertice v1, Vertice v2) {
+		grafo.quitarAristaEntreVertices(v1, v2);
+		limpiarMapa();
+		dibujarGrafoOriginalIgnoreClique();
+		grafo.data();
+	}
+
 	public void dibujarGrafoOriginal() {
 		if (cliqueEnPantalla) {
 			limpiarMapa();
-			dibujarRedVertices(grafo, estiloVerticeGrafo, colorAristasGrafo);
-			cliqueEnPantalla = false;
+			dibujarGrafoOriginalIgnoreClique();
 		}
+	}
+
+	private void dibujarGrafoOriginalIgnoreClique() {
+		dibujarRedVertices(grafo, estiloVerticeGrafo, colorAristasGrafo);
+		cliqueEnPantalla = false;
 	}
 
 	public void dibujarCliqueMasPesadaPorPeso() {
