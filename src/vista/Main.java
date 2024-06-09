@@ -75,7 +75,7 @@ public class Main {
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 
-		JButton botonAgregarArista = new JButton("Agregar relación");
+		JButton botonAgregarArista = new JButton("Modificar aristas");
 		botonAgregarArista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (controlador.cantidadVerticesGrafo() < 2) {
