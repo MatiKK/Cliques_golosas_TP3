@@ -8,11 +8,9 @@ import java.util.NoSuchElementException;
 /**
  * Clase que representa una clique.
  * Una clique es un conjunto de vértices donde todos los vértoces son vecinos
- * entre sí.
- * <p>
- * Una clique es un grafo, y un grafo puede tener cliques como subgrafos.
+ * entre sí. Un grafo puede tener cliques como subgrafos.
  */
-public class Clique extends Grafo {
+public class Clique extends RedVertices {
 
 	private final ArrayList<Vertice> vertices;
 	private double peso;
@@ -31,27 +29,37 @@ public class Clique extends Grafo {
 		}
 	}
 
-	@Override
+	public void agregarVertice(Vertice v) {
+		if (vertices.contains(v))
+			throw new IllegalArgumentException();
+		vertices.add(v);
+	}
+
+	public void agregarAristaEntreVertices(Vertice v1, Vertice v2) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void quitarAristaEntreVertices(Vertice v1, Vertice v2) {
+		throw new UnsupportedOperationException();
+	}
+
 	public int cantidadVertices() {
 		return vertices.size();
 	}
 
-	/**
-	 * @return el peso de esta clique
-	 */
 	public double peso() {
 		return peso;
 	}
 
-	@Override
 	public Collection<Vertice> vertices() {
 		return vertices;
 	}
 
-	@Override
 	public Iterator<Arista> aristasIterator() {
 		return new Iterator<Arista>() {
-			private int cantidadVertices = cantidadVertices(), ind1 = 0, ind2 = 0;
+			private int cantidadVertices = cantidadVertices(),
+						ind1 = 0,
+						ind2 = 0;
 
 			@Override
 			public boolean hasNext() {
@@ -79,15 +87,16 @@ public class Clique extends Grafo {
 		};
 	}
 
-	@Override
 	public void data() {
 		System.out.println("Clique de peso " + peso());
 		System.out.println("Vertices: " + vertices());
-		System.out.println("Aristas:");
-		Iterator<Arista> aristas = aristasIterator();
-		while (aristas.hasNext()) {
-			System.out.println(aristas.next());
-		}
+		for (Vertice v : vertices()) {
+			System.out.print("Vecinos de " + v + "(peso " + v.obtenerPeso() + "): ");
+			@SuppressWarnings("unchecked")
+			ArrayList<Vertice> ver = (ArrayList<Vertice>)vertices.clone();
+			ver.remove(v);
+			System.out.println(ver);
+		}			
 	}
 
 }
